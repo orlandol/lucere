@@ -4,41 +4,45 @@
 #include "lucere2d.h"
 #include "winimpl.h"
 
-L2DPointer wingdiCreate( unsigned monitorIndex, 
+static const DisplayInterface WinGDI = {
+  wingdiCreateDisplay,
+  wingdiReleaseDisplay,
+  wingdiGetInfo,
+  wingdiCreateCanvas,
+  wingdiReleaseCanvas,
+  wingdiGetCanvasInfo,
+  wingdiCenterCanvas,
+  wingdiFitCanvas
+};
+
+L2DDisplay* wingdiCreateDisplay( unsigned monitorIndex,
   unsigned width, unsigned height, PixelFormat* usingPixelFormat ) {
 
   return NULL;
 }
 
-void wingdiRelease( L2DPointer displayPtr ) {
+void wingdiReleaseDisplay( L2DDisplay** displayPtr ) {
 }
 
-int wingdiGetInfo( L2DPointer display, GraphicsInfo* info ) {
+int wingdiGetInfo( L2DDisplay* display, GraphicsInfo* info ) {
   return 0;
 }
 
-L2DPointer wingdiCreateCanvas( L2DPointer display,
-  unsigned width, unsigned height, PixelFormat* usingPixelFormat ) {
+L2DCanvas* wingdiCreateCanvas( L2DDisplay* display,
+  unsigned width, unsigned height, PixelFormat* ofPixelFormat ) {
 
   return NULL;
 }
 
-void wingdiReleaseCanvas( L2DPointer display, L2DPointer* canvasPtr ) {
+void wingdiReleaseCanvas( L2DDisplay* display, L2DCanvas* canvasPtr ) {
 }
 
-int wingdiGetCanvasInfo( L2DPointer canvas, GraphicsInfo* canvasInfo ) {
+int wingdiGetCanvasInfo( L2DCanvas* canvas, GraphicsInfo* canvasInfo ) {
   return 0;
 }
 
-L2DPointer wingdiBeginDraw( L2DPointer canvas ) {
-  return NULL;
+void wingdiCenterCanvas( L2DDisplay* display, L2DCanvas* canvas ) {
 }
 
-void wingdiEndDraw( L2DPointer canvas ) {
-}
-
-void wingdiCenterCanvas( L2DPointer display, L2DPointer canvas ) {
-}
-
-void wingdiFitCanvas( L2DPointer display, L2DPointer canvas ) {
+void wingdiFitCanvas( L2DDisplay* display, L2DCanvas* canvas ) {
 }

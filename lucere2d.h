@@ -4,102 +4,71 @@
 /*
  *  Base type declarations
  */
-  typedef void* L2DPointer; // General implementation pointer
+#include <stdint.h>
 
-  #include <stdint.h>
+typedef uint8_t  uint8;
+typedef uint16_t Uint16;
+typedef uint32_t Uint32;
+typedef uint64_t Uint64;
 
-  typedef uint8_t  uint8;
-  typedef uint16_t Uint16;
-  typedef uint32_t Uint32;
-  typedef uint64_t Uint64;
-
-  typedef int8_t  int8;
-  typedef int16_t int16;
-  typedef int32_t int32;
-  typedef int64_t int64;
+typedef int8_t  int8;
+typedef int16_t int16;
+typedef int32_t int32;
+typedef int64_t int64;
 
 /*
  *  Base graphics declarations
  */
 
-  typedef struct PixelFormat {
-    unsigned bpp;
+typedef struct L2DDisplayImpl L2DDisplay;
+typedef struct L2DCanvasImpl L2DCanvas;
 
-    uint8 redPos;
-    uint8 bluePos;
-    uint8 greenPos;
-    uint8 alphaPos;
+typedef struct PixelFormat {
+  unsigned bpp;
 
-    uint8 redShift;
-    uint8 greenShift;
-    uint8 blueShift;
-    uint8 alphaShift;
+  uint8 redPos;
+  uint8 bluePos;
+  uint8 greenPos;
+  uint8 alphaPos;
 
-    unsigned redMask;
-    unsigned greenMask;
-    unsigned blueMask;
-    unsigned alphaMask;
-  } PixelFormat;
+  uint8 redShift;
+  uint8 greenShift;
+  uint8 blueShift;
+  uint8 alphaShift;
 
-  typedef struct GraphicsInfo {
-    unsigned width;
-    unsigned height;
-    PixelFormat pixfmt;
-  } GraphicsInfo;
+  unsigned redMask;
+  unsigned greenMask;
+  unsigned blueMask;
+  unsigned alphaMask;
+} PixelFormat;
 
-  typedef struct DisplayInterface {
-    L2DPointer (*Create)( unsigned monitorIndex, 
-      unsigned width, unsigned height, PixelFormat* usingPixelFormat );
-    void (*Release)( L2DPointer displayPtr );
+typedef struct GraphicsInfo {
+  unsigned width;
+  unsigned height;
+  PixelFormat pixfmt;
+} GraphicsInfo;
 
-    int (*GetInfo)( L2DPointer display, GraphicsInfo* info );
+typedef struct DisplayInterface {
+  L2DDisplay* (*Create)( unsigned monitorIndex,
+    unsigned width, unsigned height, PixelFormat* usingPixelFormat );
+  void (*Release)( L2DDisplay** displayPtr );
 
-    L2DPointer (*CreateCanvas)( L2DPointer display,
-      unsigned width, unsigned height, PixelFormat* usingPixelFormat );
-    void (*ReleaseCanvas)( L2DPointer display, L2DPointer* canvasPtr );
+  int (*GetInfo)( L2DDisplay* display, GraphicsInfo* info );
 
-    int (*GetCanvasInfo)( L2DPointer canvas, GraphicsInfo* canvasInfo );
+  L2DCanvas* (*CreateCanvas)( L2DDisplay* display,
+    unsigned width, unsigned height, PixelFormat* ofPixelFormat );
+  void (*ReleaseCanvas)( L2DDisplay* display, L2DCanvas* canvasPtr );
 
-    L2DPointer (*BeginDraw)( L2DPointer canvas );
-    void (*EndDraw)( L2DPointer canvas );
+  int (*GetCanvasInfo)( L2DCanvas* canvas, GraphicsInfo* canvasInfo );
 
-    void (*CenterCanvas)( L2DPointer display, L2DPointer canvas );
-    void (*FitCanvas)( L2DPointer display, L2DPointer canvas );
-  } DisplayInterface;
+  void (*CenterCanvas)( L2DDisplay* display, L2DCanvas* canvas );
+  void (*FitCanvas)( L2DDisplay* display, L2DCanvas* canvas );
+} DisplayInterface;
 
 /*
- *  Windows GDI declarations
+ *  Windows GDI placeholders
  */
 
-    L2DPointer wingdiCreate( unsigned monitorIndex, 
-      unsigned width, unsigned height, PixelFormat* usingPixelFormat );
-    void wingdiRelease( L2DPointer displayPtr );
-
-    int wingdiGetInfo( L2DPointer display, GraphicsInfo* info );
-
-    L2DPointer wingdiCreateCanvas( L2DPointer display,
-      unsigned width, unsigned height, PixelFormat* usingPixelFormat );
-    void wingdiReleaseCanvas( L2DPointer display, L2DPointer* canvasPtr );
-
-    int wingdiGetCanvasInfo( L2DPointer canvas, GraphicsInfo* canvasInfo );
-
-    L2DPointer wingdiBeginDraw( L2DPointer canvas );
-    void wingdiEndDraw( L2DPointer canvas );
-
-    void wingdiCenterCanvas( L2DPointer display, L2DPointer canvas );
-    void wingdiFitCanvas( L2DPointer display, L2DPointer canvas );
-
-  static const DisplayInterface WinGDI = {
-    wingdiCreate,
-    wingdiRelease,
-    wingdiGetInfo,
-    wingdiCreateCanvas,
-    wingdiReleaseCanvas,
-    wingdiGetCanvasInfo,
-    wingdiBeginDraw,
-    wingdiEndDraw,
-    wingdiCenterCanvas,
-    wingdiFitCanvas
-  };
+static const DisplayInterface WinGDI;
 
 #endif
