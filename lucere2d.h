@@ -22,8 +22,9 @@ typedef int64_t int64;
 
 typedef struct L2DDisplayImpl L2DDisplay;
 typedef struct L2DCanvasImpl L2DCanvas;
+typedef struct L2DImageImpl L2DImage;
 
-typedef struct PixelFormat {
+typedef struct L2DPixelFormat {
   unsigned bpp;
 
   uint8 redPos;
@@ -36,39 +37,67 @@ typedef struct PixelFormat {
   uint8 blueShift;
   uint8 alphaShift;
 
+  unsigned rsvd;
+
   unsigned redMask;
   unsigned greenMask;
   unsigned blueMask;
   unsigned alphaMask;
-} PixelFormat;
+} L2DPixelFormat;
 
-typedef struct GraphicsInfo {
+typedef struct L2DGraphicsInfo {
   unsigned width;
   unsigned height;
-  PixelFormat pixfmt;
-} GraphicsInfo;
 
-typedef struct DisplayInterface {
-  L2DDisplay* (*Create)( unsigned monitorIndex,
-    unsigned width, unsigned height, PixelFormat* usingPixelFormat );
-  void (*Release)( L2DDisplay** displayPtr );
+  L2DPixelFormat pixfmt;
+} L2DGraphicsInfo;
 
-  int (*GetInfo)( L2DDisplay* display, GraphicsInfo* info );
+/*
+ *  Base image I/O interface declaration
+ */
+
+typedef struct L2DImageIO {
+} L2DImageIO;
+
+/*
+ *  Base graphics interface declaration
+ */
+
+typedef struct L2DGraphicsInterface {
+  // Display object
+  L2DDisplay* (*CreateDisplay)( unsigned monitorIndex, void* rsvd );
+  L2DDisplay* (*CreateWindowedDisplay)( unsigned monitorIndex,
+    unsigned width, unsigned height, void* rsvd );
+  L2DDisplay* (*CreateNullDisplay)( unsigned width, unsigned height,
+    L2DPixelFormat* ofPixelFormat, void* rsvd );
+
+  void (*ReleaseDisplay)( L2DDisplay** displayPtr );
+
+  unsigned (*GetDisplayInfo)( L2DDisplay* display, L2DGraphicsInfo* info );
 
   L2DCanvas* (*CreateCanvas)( L2DDisplay* display,
-    unsigned width, unsigned height, PixelFormat* ofPixelFormat );
-  void (*ReleaseCanvas)( L2DDisplay* display, L2DCanvas* canvasPtr );
-
-  int (*GetCanvasInfo)( L2DCanvas* canvas, GraphicsInfo* canvasInfo );
+    unsigned width, unsigned height );
+  L2DCanvas* (*LoadCanvas)( L2DDisplay* display, L2DImageIO* imageIO );
 
   void (*CenterCanvas)( L2DDisplay* display, L2DCanvas* canvas );
   void (*FitCanvas)( L2DDisplay* display, L2DCanvas* canvas );
-} DisplayInterface;
+
+  // Canvas object
+  void (*ReleaseCanvas)( L2DCanvas* canvasPtr );
+
+  unsigned (*GetCanvasInfo)( L2DCanvas* canvas, L2DGraphicsInfo* canvasInfo );
+
+  L2DImage* (*CreateImage)( L2DCanvas* canvas, unsigned width, unsigned height );
+  L2DImage* (*LoadImage)( L2DCanvas* canvas, L2DImageIO* imageIO );
+
+  // Image object
+  void (*ReleaseImage)( L2DImage** imagePtr );
+} L2DGraphicsInterface;
 
 /*
- *  Windows GDI placeholders
+ *  Graphics API specific interface declarations
  */
 
-static const DisplayInterface WinGDI;
+extern const L2DGraphicsInterface giWinGDI;
 
 #endif
