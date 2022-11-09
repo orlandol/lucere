@@ -20,9 +20,14 @@ typedef int64_t int64;
  *  Base graphics declarations
  */
 
-typedef struct L2DDisplayImpl L2DDisplay;
-typedef struct L2DCanvasImpl L2DCanvas;
-typedef struct L2DImageImpl L2DImage;
+typedef struct L2DDisplayInterface L2DDisplayInterface;
+typedef struct L2DDisplay L2DDisplay;
+
+typedef struct L2DCanvasInterface L2DCanvasInterface;
+typedef struct L2DCanvas L2DCanvas;
+
+typedef struct L2DImageInterface L2DImageInterface;
+typedef struct L2DImage L2DImage;
 
 typedef struct L2DPixelFormat {
   unsigned bpp;
@@ -48,7 +53,6 @@ typedef struct L2DPixelFormat {
 typedef struct L2DGraphicsInfo {
   unsigned width;
   unsigned height;
-
   L2DPixelFormat pixfmt;
 } L2DGraphicsInfo;
 
@@ -56,14 +60,13 @@ typedef struct L2DGraphicsInfo {
  *  Base image I/O interface declaration
  */
 
-typedef struct L2DImageLoad {
-} L2DImageLoad;
+typedef struct L2DImageLoad L2DImageLoad;
 
 /*
  *  Base graphics interface declaration
  */
 
-typedef struct L2DGraphicsInterfaceImpl L2DGraphicsInterface;
+typedef struct L2DGraphicsInterface L2DGraphicsInterface;
 
 /*
  *  Graphics API specific interface declarations
@@ -72,10 +75,11 @@ typedef struct L2DGraphicsInterfaceImpl L2DGraphicsInterface;
 extern const L2DGraphicsInterface giWinGDI;
 
 /*
- *  General graphics interface
+ *  Abstract graphics interface
  */
 
-L2DDisplay* CreateDisplay( const L2DGraphicsInterface* graphicsInterface, unsigned monitorIndex, void* rsvd );
+L2DDisplay* CreateDisplay( const L2DGraphicsInterface* graphicsInterface,
+  unsigned monitorIndex, const char* appTitle, void* rsvd );
 void ReleaseDisplay( L2DDisplay** displayPtr );
 
 L2DCanvas* CreateCanvas( L2DDisplay* display, unsigned width, unsigned height );

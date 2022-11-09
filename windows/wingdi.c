@@ -1,11 +1,12 @@
 
 #include <stddef.h>
 
-#include "..\lucere2d.h"
-#include "..\impl.h"
-#include "winimpl.h"
+#include "lucere2d.h"
+#include "l2dimpl.h"
+#include "wingdi.h"
 
 const L2DGraphicsInterface giWinGDI = {
+  {
   // Display object
   wingdiCreateDisplay,
   wingdiCreateWindowedDisplay,
@@ -16,7 +17,9 @@ const L2DGraphicsInterface giWinGDI = {
   wingdiLoadCanvas,
   wingdiCenterCanvas,
   wingdiFitCanvas,
+  },
 
+  {
   // Canvas object
   wingdiReleaseCanvas,
   wingdiGetCanvasInfo,
@@ -33,27 +36,32 @@ const L2DGraphicsInterface giWinGDI = {
   wingdiLine,
   wingdiCircle,
   wingdiEllipsoid,
+  },
 
+  {
   // Image object
   wingdiReleaseImage
+  }
 };
 
 /*
  *  Display implementation
  */
 
-L2DDisplay* wingdiCreateDisplay( unsigned monitorIndex, void* rsvd ) {
+L2DDisplay* wingdiCreateDisplay( unsigned monitorIndex,
+  const char* appTitle, void* rsvd ) {
+
   return NULL;
 }
 
 L2DDisplay* wingdiCreateWindowedDisplay( unsigned monitorIndex,
-  unsigned width, unsigned height, void* rsvd ) {
+  unsigned width, unsigned height, const char* appTitle, void* rsvd ) {
 
   return NULL;
 }
 
 L2DDisplay* wingdiCreateNullDisplay( unsigned width, unsigned height,
-  L2DPixelFormat* ofPixelFormat, void* rsvd ) {
+  L2DPixelFormat* ofPixelFormat, const char* appTitle, void* rsvd ) {
 
   return NULL;
 }

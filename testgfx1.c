@@ -1,5 +1,6 @@
 
 #include <stdlib.h>
+#include <stdio.h>
 
 #include "lucere2d.h"
 
@@ -14,7 +15,7 @@ void Cleanup() {
 int main( int argc, char** argv ) {
   atexit( Cleanup );
 
-  display = CreateDisplay( &giWinGDI, 0, NULL );
+  display = CreateDisplay(&giWinGDI, 0, "TestGfx1", NULL);
   canvas = CreateCanvas(display, 0, 0);
 
   Cleanup();
