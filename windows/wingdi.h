@@ -15,6 +15,9 @@ typedef struct wingdiCanvas {
   L2DCanvasInterface methods;
 } wingdiCanvas;
 
+typedef struct wingdiDrawCtx {
+} wingdiDrawCtx;
+
 typedef struct wingdiImage {
   L2DImageInterface methods;
 } wingdiImage;
@@ -23,12 +26,11 @@ typedef struct wingdiImage {
  *  Display declarations
  */
 
-L2DDisplay* wingdiCreateDisplay( unsigned monitorIndex,
-  const char* appTitle, void* rsvd );
+L2DDisplay* wingdiCreateDisplay( unsigned monitorIndex );
 L2DDisplay* wingdiCreateWindowedDisplay( unsigned monitorIndex,
-  unsigned width, unsigned height, const char* appTitle, void* rsvd );
+  unsigned width, unsigned height );
 L2DDisplay* wingdiCreateNullDisplay( unsigned width, unsigned height,
-  L2DPixelFormat* ofPixelFormat, const char* appTitle, void* rsvd );
+  L2DPixelFormat* ofPixelFormat );
 
 void wingdiReleaseDisplay( L2DDisplay** displayPtr );
 
@@ -56,6 +58,9 @@ L2DImage* wingdiCaptureImage( L2DCanvas* canvas,
 L2DImage* wingdiLoadImage( L2DCanvas* canvas, L2DImageLoad* source );
 L2DImage* wingdiLoadImageRect( L2DCanvas* canvas, L2DImageLoad* source,
   int x1, int y1, int x2, int y2 );
+
+L2DDrawCtx* wingdiBeginDraw( L2DCanvas* canvas );
+void wingdiEndDraw( L2DDrawCtx** drawCtxPtr );
 
 void wingdiDrawImage( L2DCanvas* canvas, int x, int y, L2DImage* image );
 void wingdiTransImage( L2DCanvas* canvas, int x, int y, L2DImage* image );

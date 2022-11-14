@@ -29,6 +29,9 @@ const L2DGraphicsInterface giWinGDI = {
   wingdiLoadImage,
   wingdiLoadImageRect,
 
+  wingdiBeginDraw,
+  wingdiEndDraw,
+
   wingdiDrawImage,
   wingdiTransImage,
   wingdiBlendImage,
@@ -48,20 +51,19 @@ const L2DGraphicsInterface giWinGDI = {
  *  Display implementation
  */
 
-L2DDisplay* wingdiCreateDisplay( unsigned monitorIndex,
-  const char* appTitle, void* rsvd ) {
+L2DDisplay* wingdiCreateDisplay( unsigned monitorIndex ) {
 
   return NULL;
 }
 
 L2DDisplay* wingdiCreateWindowedDisplay( unsigned monitorIndex,
-  unsigned width, unsigned height, const char* appTitle, void* rsvd ) {
+  unsigned width, unsigned height ) {
 
   return NULL;
 }
 
 L2DDisplay* wingdiCreateNullDisplay( unsigned width, unsigned height,
-  L2DPixelFormat* ofPixelFormat, const char* appTitle, void* rsvd ) {
+  L2DPixelFormat* ofPixelFormat ) {
 
   return NULL;
 }
@@ -124,24 +126,31 @@ L2DImage* wingdiLoadImageRect( L2DCanvas* canvas, L2DImageLoad* source,
   return NULL;
 }
 
-void wingdiDrawImage( L2DCanvas* canvas, int x, int y, L2DImage* image ) {
+L2DDrawCtx* wingdiBeginDraw( L2DCanvas* canvas ) {
+  return NULL;
 }
 
-void wingdiTransImage( L2DCanvas* canvas, int x, int y, L2DImage* image ) {
+void wingdiEndDraw( L2DDrawCtx** drawCtxPtr ) {
 }
 
-void wingdiBlendImage( L2DCanvas* canvas, int x, int y, L2DImage* image ) {
+void wingdiDrawImage( L2DDrawCtx* drawCtx, int x, int y, L2DImage* image ) {
 }
 
-void wingdiLine( L2DCanvas* canvas,
+void wingdiTransImage( L2DDrawCtx* drawCtx, int x, int y, L2DImage* image ) {
+}
+
+void wingdiBlendImage( L2DDrawCtx* drawCtx, int x, int y, L2DImage* image ) {
+}
+
+void wingdiLine( L2DDrawCtx* drawCtx,
   int x1, int y1, int x2, int y2, unsigned color ) {
 }
 
-void wingdiCircle( L2DCanvas* canvas,
+void wingdiCircle( L2DDrawCtx* drawCtx,
   int x, int y, unsigned radius, unsigned color ) {
 }
 
-void wingdiEllipsoid( L2DCanvas* canvas,
+void wingdiEllipsoid( L2DDrawCtx* drawCtx,
   int x1, int y1, int x2, int y2, unsigned color ) {
 }
 

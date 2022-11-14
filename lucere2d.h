@@ -23,6 +23,8 @@ typedef int64_t int64;
 typedef struct L2DDisplayInterface L2DDisplayInterface;
 typedef struct L2DDisplay L2DDisplay;
 
+typedef struct L2DDrawCtx L2DDrawCtx;
+
 typedef struct L2DCanvasInterface L2DCanvasInterface;
 typedef struct L2DCanvas L2DCanvas;
 
@@ -75,14 +77,27 @@ typedef struct L2DGraphicsInterface L2DGraphicsInterface;
 extern const L2DGraphicsInterface giWinGDI;
 
 /*
- *  Abstract graphics interface
+ *  Abstract display interface
  */
 
 L2DDisplay* CreateDisplay( const L2DGraphicsInterface* graphicsInterface,
-  unsigned monitorIndex, const char* appTitle, void* rsvd );
+  unsigned monitorIndex );
 void ReleaseDisplay( L2DDisplay** displayPtr );
+
+/*
+ *  Abstract canvas interface
+ */
 
 L2DCanvas* CreateCanvas( L2DDisplay* display, unsigned width, unsigned height );
 void ReleaseCanvas( L2DCanvas** canvasPtr );
+
+/*
+ *  Abstract app interface
+ */
+
+typedef struct L2DApp L2DApp;
+
+L2DApp* CreateAppFromDisplay( L2DDisplay* display,
+  const char* title, void* rsvd );
 
 #endif
