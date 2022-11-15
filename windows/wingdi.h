@@ -8,17 +8,25 @@
  */
 
 typedef struct wingdiDisplay {
+  size_t totalSize;
+  unsigned displayID;
   L2DDisplayInterface methods;
 } wingdiDisplay;
 
+typedef struct wingdiDrawCtx {
+  size_t totalSize;
+  unsigned drawCtxID;
+} wingdiDrawCtx;
+
 typedef struct wingdiCanvas {
+  size_t totalSize;
+  unsigned canvasID;
   L2DCanvasInterface methods;
 } wingdiCanvas;
 
-typedef struct wingdiDrawCtx {
-} wingdiDrawCtx;
-
 typedef struct wingdiImage {
+  size_t totalSize;
+  unsigned imageID;
   L2DImageInterface methods;
 } wingdiImage;
 
@@ -62,17 +70,17 @@ L2DImage* wingdiLoadImageRect( L2DCanvas* canvas, L2DImageLoad* source,
 L2DDrawCtx* wingdiBeginDraw( L2DCanvas* canvas );
 void wingdiEndDraw( L2DDrawCtx** drawCtxPtr );
 
-void wingdiDrawImage( L2DCanvas* canvas, int x, int y, L2DImage* image );
-void wingdiTransImage( L2DCanvas* canvas, int x, int y, L2DImage* image );
-void wingdiBlendImage( L2DCanvas* canvas, int x, int y, L2DImage* image );
+void wingdiDrawImage( L2DDrawCtx* drawCtx, int x, int y, L2DImage* image );
+void wingdiTransImage( L2DDrawCtx* drawCtx, int x, int y, L2DImage* image );
+void wingdiBlendImage( L2DDrawCtx* drawCtx, int x, int y, L2DImage* image );
 
-void wingdiLine( L2DCanvas* canvas,
+void wingdiLine( L2DDrawCtx* drawCtx,
   int x1, int y1, int x2, int y2, unsigned color );
 
-void wingdiCircle( L2DCanvas* canvas,
+void wingdiCircle( L2DDrawCtx* drawCtx,
   int x, int y, unsigned radius, unsigned color );
 
-void wingdiEllipsoid( L2DCanvas* canvas,
+void wingdiEllipsoid( L2DDrawCtx* drawCtx,
   int x1, int y1, int x2, int y2, unsigned color );
 
 /*

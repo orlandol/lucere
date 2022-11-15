@@ -30,7 +30,7 @@ typedef struct L2DDisplay {
 
 typedef struct L2DDrawCtx {
   size_t totalSize;
-  unsigned drawctxID;
+  unsigned drawCtxID;
 } L2DDrawCtx;
 
 typedef struct L2DCanvasInterface {
@@ -48,8 +48,8 @@ typedef struct L2DCanvasInterface {
   L2DImage* (*LoadImageRect)( L2DCanvas* canvas, L2DImageLoad* source,
     int x1, int y1, int x2, int y2 );
 
-  L2DDrawCtx* BeginDraw( L2DCanvas* canvas );
-  void EndDraw( L2DDrawCtx** drawCtxPtr );
+  L2DDrawCtx* (*BeginDraw)( L2DCanvas* canvas );
+  void (*EndDraw)( L2DDrawCtx** drawCtxPtr );
 
   void (*DrawImage)( L2DDrawCtx* drawCtx, int x, int y, L2DImage* image );
   void (*TransImage)( L2DDrawCtx* drawCtx, int x, int y, L2DImage* image );
@@ -74,6 +74,8 @@ typedef struct L2DImageInterface {
 } L2DImageInterface;
 
 typedef struct L2DImage {
+  size_t totalSize;
+  unsigned imageID;
   L2DImageInterface methods;
 } L2DImage;
 

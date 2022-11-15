@@ -20,17 +20,6 @@ typedef int64_t int64;
  *  Base graphics declarations
  */
 
-typedef struct L2DDisplayInterface L2DDisplayInterface;
-typedef struct L2DDisplay L2DDisplay;
-
-typedef struct L2DDrawCtx L2DDrawCtx;
-
-typedef struct L2DCanvasInterface L2DCanvasInterface;
-typedef struct L2DCanvas L2DCanvas;
-
-typedef struct L2DImageInterface L2DImageInterface;
-typedef struct L2DImage L2DImage;
-
 typedef struct L2DPixelFormat {
   unsigned bpp;
 
@@ -57,6 +46,17 @@ typedef struct L2DGraphicsInfo {
   unsigned height;
   L2DPixelFormat pixfmt;
 } L2DGraphicsInfo;
+
+typedef struct L2DDisplayInterface L2DDisplayInterface;
+typedef struct L2DDisplay L2DDisplay;
+
+typedef struct L2DDrawCtx L2DDrawCtx;
+
+typedef struct L2DCanvasInterface L2DCanvasInterface;
+typedef struct L2DCanvas L2DCanvas;
+
+typedef struct L2DImageInterface L2DImageInterface;
+typedef struct L2DImage L2DImage;
 
 /*
  *  Base image I/O interface declaration
@@ -99,5 +99,10 @@ typedef struct L2DApp L2DApp;
 
 L2DApp* CreateAppFromDisplay( L2DDisplay* display,
   const char* title, void* rsvd );
+void ReleaseApp( L2DApp** appPtr );
+
+void ExitApp( int returnCode );
+
+unsigned AppIsOpen( L2DApp* app );
 
 #endif

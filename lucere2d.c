@@ -14,8 +14,8 @@ L2DDisplay* CreateDisplay( const L2DGraphicsInterface* graphicsInterface,
   if( graphicsInterface &&
     graphicsInterface->displayMethods.CreateDisplay ) {
 
-    newDisplay = graphicsInterface->displayMethods.CreateDisplay(
-      monitorIndex, appTitle, rsvd );
+    newDisplay =
+      graphicsInterface->displayMethods.CreateDisplay(monitorIndex);
   }
 
   return newDisplay;
@@ -59,4 +59,14 @@ L2DApp* CreateAppFromDisplay( L2DDisplay* display,
   const char* title, void* rsvd ) {
 
   return NULL;
+}
+
+void ReleaseApp( L2DApp** appPtr ) {
+}
+
+void ExitApp( int returnCode ) {
+}
+
+unsigned AppIsOpen( L2DApp* app ) {
+  return 0;
 }
