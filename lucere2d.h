@@ -105,4 +105,40 @@ void ExitApp( int returnCode );
 
 unsigned AppIsOpen( L2DApp* app );
 
+/*
+ *  Win32 custom event handler declarations
+ */
+
+#ifdef _WIN32
+
+#include "windows.h"
+
+typedef LRESULT CALLBACK L2DEventHandler( HWND wpWindow,
+  UINT wpMessage, WPARAM wpWParam, LPARAM wpLParam );
+
+#define L2DAPP_DECLARE_EVENTHANDLER( HANDLERNAME )\
+  LRESULT CALLBACK HANDLERNAME( HWND wpWindow,\
+    UINT wpMessage, WPARAM wpWParam, LPARAM wpLParam );
+
+#endif
+
+/* Example usage
+#ifdef _WIN32
+  L2DW32APP_DECLARE_EVENTHANDLER( wbrHandleEvent )
+
+  L2DW32APP_IMPLEMENT_EVENTHANDLER_BEGIN( wbrHandleEvent )
+    if( EasyTab_HandleEvent(Window, Message, LParam, WParam) == EASYTAB_OK ) {
+      return 1;
+    }
+
+    L2DW32APP_HANDLE_MESSAGE
+
+  L2DW32APP_IMPLEMENT_EVENTHANDLER_END
+  ...
+  App* app = CreateAppFromDisplay(display, wbrHandleEvent);
+  ...
+#endif
+*/
+
+
 #endif
