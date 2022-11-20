@@ -92,20 +92,6 @@ L2DCanvas* CreateCanvas( L2DDisplay* display, unsigned width, unsigned height );
 void ReleaseCanvas( L2DCanvas** canvasPtr );
 
 /*
- *  Abstract app interface
- */
-
-typedef struct L2DApp L2DApp;
-
-L2DApp* CreateAppFromDisplay( L2DDisplay* display,
-  const char* title, void* rsvd );
-void ReleaseApp( L2DApp** appPtr );
-
-void ExitApp( int returnCode );
-
-unsigned AppIsOpen( L2DApp* app );
-
-/*
  *  Win32 custom event handler declarations
  */
 
@@ -113,32 +99,63 @@ unsigned AppIsOpen( L2DApp* app );
 
 #include "windows.h"
 
-typedef LRESULT CALLBACK L2DEventHandler( HWND wpWindow,
+typedef LRESULT CALLBACK L2DEventRouter( HWND wpWindow,
   UINT wpMessage, WPARAM wpWParam, LPARAM wpLParam );
 
-#define L2DAPP_DECLARE_EVENTHANDLER( HANDLERNAME )\
-  LRESULT CALLBACK HANDLERNAME( HWND wpWindow,\
+#define L2DAPP_DECLARE_EVENTROUTER( ROUTERNAME )\
+  LRESULT CALLBACK ROUTERNAME( HWND wpWindow,\
     UINT wpMessage, WPARAM wpWParam, LPARAM wpLParam );
+
+#define L2DAPP_IMPLEMENT_EVENTROUTER( ROUTERNAME )\
+  LRESULT CALLBACK ROUTERNAME( HWND wpWindow,\
+    UINT wpMessage, WPARAM wpWParam, LPARAM wpLParam ) {
+
+#define L2DAPP_ROUTE_INTERNALEVENTS\
+  switch( wpMessage ) {\
+  }
+
+#define L2DAPP_ROUTE_SYSTEMEVENTS\
+  return DefWindowProc(wpWindow, wpMessage, wpWParam, wpLParam);
+
+#define L2DAPP_IMPLEMENT_EVENTROUTER_END\
+  }
 
 #endif
 
 /* Example usage
 #ifdef _WIN32
-  L2DW32APP_DECLARE_EVENTHANDLER( wbrHandleEvent )
+  L2DAPP_DECLARE_EVENTROUTER( wbrRouteEvent )
 
-  L2DW32APP_IMPLEMENT_EVENTHANDLER_BEGIN( wbrHandleEvent )
-    if( EasyTab_HandleEvent(Window, Message, LParam, WParam) == EASYTAB_OK ) {
+  L2DAPP_IMPLEMENT_EVENTROUTER_BEGIN( wbrRouteEvent )
+    if( EasyTab_HandleEvent(wpWindow, wpMessage, wpLParam, wpWParam) == EASYTAB_OK ) {
       return 1;
     }
 
-    L2DW32APP_HANDLE_MESSAGE
+    L2DAPP_ROUTE_INTERNALEVENTS
+    L2DAPP_ROUTE_SYSTEMEVENTS
 
-  L2DW32APP_IMPLEMENT_EVENTHANDLER_END
+  L2DAPP_IMPLEMENT_EVENTROUTER_END
+
   ...
-  App* app = CreateAppFromDisplay(display, wbrHandleEvent);
+  App* app = CreateAppFromDisplay(display, wbrRouteEvent);
   ...
 #endif
 */
 
+/*
+ *  Abstract app interface
+ */
+
+typedef struct L2DApp L2DApp;
+
+L2DApp* CreateAppFromDisplay( L2DDisplay* display,
+  const char* title, L2DEventRouter* eventRouter );
+L2DApp* CreateApp( unsigned width, unsigned height,
+  const char* title, L2DEventRouter* eventRouter );
+void ReleaseApp( L2DApp** appPtr );
+
+void ExitApp( L2DApp* app, int returnCode );
+
+unsigned AppIsOpen( L2DApp* app );
 
 #endif

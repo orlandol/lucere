@@ -56,7 +56,13 @@ void ReleaseCanvas( L2DCanvas** canvasPtr ) {
  */
 
 L2DApp* CreateAppFromDisplay( L2DDisplay* display,
-  const char* title, void* rsvd ) {
+  const char* title, L2DEventRouter* eventRouter ) {
+
+  return NULL;
+}
+
+L2DApp* CreateApp( unsigned with, unsigned height,
+  const char* title, L2DEventRouter* eventRouter ) {
 
   return NULL;
 }
@@ -64,7 +70,7 @@ L2DApp* CreateAppFromDisplay( L2DDisplay* display,
 void ReleaseApp( L2DApp** appPtr ) {
 }
 
-void ExitApp( int returnCode ) {
+void ExitApp( L2DApp* app, int returnCode ) {
 }
 
 unsigned AppIsOpen( L2DApp* app ) {
