@@ -4,7 +4,7 @@
 #include "lucere2d.h"
 #include "l2dimpl.h"
 
-#define L2D_APPID_WIN32 1
+#include "windows.h"
 
 typedef struct L2DWin32App {
   size_t totalSize;

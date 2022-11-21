@@ -2,6 +2,12 @@
 #define H_LUCERE2D
 
 /*
+ *  Lucere2D object IDs
+ */
+
+#define L2D_OBJECTID_W32APP 1
+
+/*
  *  Base type declarations
  */
 #include <stdint.h>

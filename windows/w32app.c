@@ -1,7 +1,18 @@
 
+#include <stdlib.h>
+
+#include "windows.h"
+
 #include "lucere2d.h"
 #include "l2dimpl.h"
 #include "w32app.h"
+
+/*
+ *  Win32 specific variables
+ */
+
+HINSTANCE w32AppInstance = NULL;
+int w32AppCmdShow = SW_SHOWNORMAL;
 
 /*
  *  Abstract app Win32 implementation
@@ -62,7 +73,7 @@ L2DApp* CreateApp( unsigned width, unsigned height,
   if( eventRouter ) {
     wcex.lpfnWndProc = eventRouter;
   }
-  wcex.hInstance = win32AppInstance;
+  wcex.hInstance = w32AppInstance;
   wcex.hIcon = LoadIcon(0, IDI_APPLICATION);
   wcex.hCursor = LoadCursor(0, IDC_ARROW);
   wcex.lpszClassName = "L2DApp";
@@ -104,9 +115,6 @@ unsigned AppIsOpen( L2DApp* app ) {
 /*
  *  WinMain to main adapter
  */
-
-HINSTANCE w32AppInstance;
-int w32AppCmdShow;
 
 int WINAPI wWinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
   PWSTR pCmdLine, int nCmdShow ) {
