@@ -114,7 +114,7 @@ typedef LRESULT CALLBACK L2DEventRouter( HWND wpWindow,
   switch( wpMessage ) {\
   }
 
-#define L2DAPP_ROUTE_SYSTEMEVENTS\
+#define L2DAPP_DELEGATE_TO_SYSTEM\
   return DefWindowProc(wpWindow, wpMessage, wpWParam, wpLParam);
 
 #define L2DAPP_IMPLEMENT_EVENTROUTER_END\

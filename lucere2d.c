@@ -50,29 +50,3 @@ void ReleaseCanvas( L2DCanvas** canvasPtr ) {
     }
   }
 }
-
-/*
- *  Abstract app implementation
- */
-
-L2DApp* CreateAppFromDisplay( L2DDisplay* display,
-  const char* title, L2DEventRouter* eventRouter ) {
-
-  return NULL;
-}
-
-L2DApp* CreateApp( unsigned with, unsigned height,
-  const char* title, L2DEventRouter* eventRouter ) {
-
-  return NULL;
-}
-
-void ReleaseApp( L2DApp** appPtr ) {
-}
-
-void ExitApp( L2DApp* app, int returnCode ) {
-}
-
-unsigned AppIsOpen( L2DApp* app ) {
-  return 0;
-}

@@ -24,13 +24,13 @@ typedef struct L2DDisplayInterface {
 
 typedef struct L2DDisplay {
   size_t totalSize;
-  unsigned displayID;
+  unsigned objectID;
   L2DDisplayInterface methods;
 } L2DDisplay;
 
 typedef struct L2DDrawCtx {
   size_t totalSize;
-  unsigned drawCtxID;
+  unsigned objectID;
 } L2DDrawCtx;
 
 typedef struct L2DCanvasInterface {
@@ -65,7 +65,7 @@ typedef struct L2DCanvasInterface {
 
 typedef struct L2DCanvas {
   size_t totalSize;
-  unsigned canvasID;
+  unsigned objectID;
   L2DCanvasInterface methods;
 } L2DCanvas;
 
@@ -75,7 +75,7 @@ typedef struct L2DImageInterface {
 
 typedef struct L2DImage {
   size_t totalSize;
-  unsigned imageID;
+  unsigned objectID;
   L2DImageInterface methods;
 } L2DImage;
 
@@ -86,6 +86,8 @@ typedef struct L2DGraphicsInterface {
 } L2DGraphicsInterface;
 
 typedef struct L2DApp {
+  size_t totalSize;
+  unsigned objectID;
 } L2DApp;
 
 #endif
