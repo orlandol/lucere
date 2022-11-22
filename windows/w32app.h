@@ -1,10 +1,8 @@
 #ifndef W32APP_H
 #define W32APP_H
 
-#include "lucere2d.h"
-#include "l2dimpl.h"
-
-#include "windows.h"
+#include "../lucere2d.h"
+#include "../l2dimpl.h"
 
 typedef struct L2DWin32App {
   size_t totalSize;

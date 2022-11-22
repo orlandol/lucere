@@ -3,8 +3,8 @@
 
 #include "windows.h"
 
-#include "lucere2d.h"
-#include "l2dimpl.h"
+#include "../lucere2d.h"
+#include "../l2dimpl.h"
 #include "w32app.h"
 
 /*
@@ -77,7 +77,7 @@ L2DApp* CreateApp( unsigned width, unsigned height,
   wcex.hIcon = LoadIcon(0, IDI_APPLICATION);
   wcex.hCursor = LoadCursor(0, IDC_ARROW);
   wcex.lpszClassName = "L2DApp";
-  hIconSm = LoadIcon(0, IDI_APPLICATION);
+  wcex.hIconSm = LoadIcon(0, IDI_APPLICATION);
   if( RegisterClassEx(&wcex) == 0 ) {
     goto ReturnError;
   }
@@ -87,7 +87,7 @@ L2DApp* CreateApp( unsigned width, unsigned height,
     WS_OVERLAPPEDWINDOW,
     CW_USEDEFAULT, CW_USEDEFAULT,
     0, 0,
-    0, 0, win32AppInstance, 0
+    0, 0, w32AppInstance, 0
   );
   if( newApp->window == NULL ) {
     goto ReturnError;
@@ -115,6 +115,8 @@ unsigned AppIsOpen( L2DApp* app ) {
 /*
  *  WinMain to main adapter
  */
+
+extern int main( int argc, char** argv );
 
 int WINAPI wWinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
   PWSTR pCmdLine, int nCmdShow ) {

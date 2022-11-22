@@ -1,7 +1,7 @@
 #ifndef H_WINIMPL
 #define H_WINIMPL
 
-#include "l2dimpl.h"
+#include "../l2dimpl.h"
 
 /*
  *  Win32 context declarations

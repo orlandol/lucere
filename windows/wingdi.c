@@ -1,8 +1,8 @@
 
 #include <stddef.h>
 
-#include "lucere2d.h"
-#include "l2dimpl.h"
+#include "../lucere2d.h"
+#include "../l2dimpl.h"
 #include "wingdi.h"
 
 const L2DGraphicsInterface giWinGDI = {
