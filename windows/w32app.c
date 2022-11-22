@@ -12,7 +12,91 @@
  */
 
 HINSTANCE w32AppInstance = NULL;
+HINSTANCE w32AppPrevInstance = NULL;
 int w32AppCmdShow = SW_SHOWNORMAL;
+
+/*
+ *  Win32 helper functions
+ */
+
+unsigned GetDesktopResolution( unsigned* width, unsigned* height,
+  unsigned* bpp ) {
+
+  MONITORINFO monitorInfo = {};
+  POINT point = {};
+  HMONITOR monitor;
+  HDC dc;
+  unsigned calculatedWidth;
+  unsigned calculatedHeight;
+  unsigned desktopBPP;
+
+  monitor = MonitorFromPoint(point, MONITOR_DEFAULTTOPRIMARY);
+
+  monitorInfo.cbSize = sizeof(monitorInfo);
+  if( GetMonitorInfo(monitor, &monitorInfo) == 0 ) {
+    return 4;
+  }
+
+  calculatedWidth = abs(monitorInfo.rcMonitor.right - monitorInfo.rcMonitor.left);
+  if( width ) {
+    *width = calculatedWidth;
+  }
+
+  calculatedHeight = abs(monitorInfo.rcMonitor.bottom - monitorInfo.rcMonitor. top);
+  if( height ) {
+    *height = calculatedHeight;
+  }
+
+  ///TODO: Get Desktop BPP using the correct method
+  ///TODO: Distinguish between 15/16-BPP
+  if( bpp ) {
+    dc = GetDC(0);
+    if( dc ) {
+      desktopBPP = GetDeviceCaps(dc, PLANES) * GetDeviceCaps(dc, BITSPIXEL);
+      *bpp = desktopBPP;
+      ReleaseDC(0, dc);
+    }
+  }
+
+  return 0;
+}
+
+void ResizeClient( HWND window, unsigned toWidth, unsigned toHeight ) {
+  RECT winRect;
+  RECT clientRect;
+  int winWidth;
+  int winHeight;
+  int clientWidth;
+  int clientHeight;
+  int ncWidth;
+  int ncHeight;
+  int newWidth;
+  int newHeight;
+
+  if( window && (newWidth || newHeight) ) {
+    GetWindowRect( window, &winRect );
+    winWidth = (winRect.right - winRect.left);
+    winHeight = (winRect.bottom - winRect.top);
+
+    GetClientRect( window, &clientRect );
+    clientWidth = (clientRect.right - clientRect.left);
+    clientHeight = (clientRect.bottom - clientRect.top);
+
+    ncWidth = winWidth - clientWidth;
+    ncHeight = winHeight - clientHeight;
+
+    newWidth = ncWidth + toWidth;
+    newHeight = ncHeight + toHeight;
+
+    SetWindowPos( window, 0, winRect.left, winRect.top,
+      newWidth, newHeight,
+      SWP_NOMOVE | SWP_NOZORDER | SWP_NOACTIVATE
+    );
+  }
+}
+
+void CenterWindow( HWND window ) {
+}
 
 /*
  *  Abstract app Win32 implementation
@@ -93,6 +177,12 @@ L2DApp* CreateApp( unsigned width, unsigned height,
     goto ReturnError;
   }
 
+  ResizeClient( newApp->window, width, height );
+  CenterWindow( newApp->window );
+
+  ShowWindow( newApp->window, w32AppCmdShow );
+  UpdateWindow( newApp->window );
+
   return newApp;
 
 ReturnError:
@@ -122,6 +212,7 @@ int WINAPI wWinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
   PWSTR pCmdLine, int nCmdShow ) {
 
   w32AppInstance = hInstance;
+  w32AppPrevInstance = hPrevInstance;
   w32AppCmdShow = nCmdShow;
 
   int argc = 0;

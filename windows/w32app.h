@@ -11,6 +11,13 @@ typedef struct L2DWin32App {
 } L2DWin32App;
 
 extern HINSTANCE w32AppInstance;
+extern HINSTANCE w32AppPrevInstance;
 extern int w32AppCmdShow;
+
+unsigned GetDesktopResolution( unsigned* width, unsigned* height,
+  unsigned* bpp );
+
+void ResizeClient( HWND window, unsigned clientWidth, unsigned clientnewHeight );
+void CenterWindow( HWND window );
 
 #endif
