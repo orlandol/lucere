@@ -8,14 +8,6 @@
 #include "w32app.h"
 
 /*
- *  Win32 specific variables
- */
-
-HINSTANCE w32AppInstance = NULL;
-HINSTANCE w32AppPrevInstance = NULL;
-int w32AppCmdShow = SW_SHOWNORMAL;
-
-/*
  *  Win32 helper functions
  */
 
@@ -157,7 +149,8 @@ L2DApp* CreateApp( unsigned width, unsigned height,
   if( eventRouter ) {
     wcex.lpfnWndProc = eventRouter;
   }
-  wcex.hInstance = w32AppInstance;
+  //wcex.hInstance = w32AppInstance;
+  wcex.hInstance = 0;
   wcex.hIcon = LoadIcon(0, IDI_APPLICATION);
   wcex.hCursor = LoadCursor(0, IDC_ARROW);
   wcex.lpszClassName = "L2DApp";
@@ -171,7 +164,9 @@ L2DApp* CreateApp( unsigned width, unsigned height,
     WS_OVERLAPPEDWINDOW,
     CW_USEDEFAULT, CW_USEDEFAULT,
     0, 0,
-    0, 0, w32AppInstance, 0
+    0, 0,
+    //w32AppInstance, 0
+    0, 0
   );
   if( newApp->window == NULL ) {
     goto ReturnError;
@@ -180,7 +175,8 @@ L2DApp* CreateApp( unsigned width, unsigned height,
   ResizeClient( newApp->window, width, height );
   CenterWindow( newApp->window );
 
-  ShowWindow( newApp->window, w32AppCmdShow );
+  //ShowWindow( newApp->window, w32AppCmdShow );
+  ShowWindow( newApp->window, SW_SHOWNORMAL );
   UpdateWindow( newApp->window );
 
   return newApp;
@@ -199,24 +195,17 @@ void ExitApp( L2DApp* app, int returnCode ) {
 }
 
 unsigned AppIsOpen( L2DApp* app ) {
+  L2DWin32App* w32app = (L2DWin32App*)app;
+  MSG appMessage = {};
+
+  if( w32app && w32app->window ) {
+    if( PeekMessage(&appMessage, NULL, 0, 0, PM_REMOVE) ) {
+      TranslateMessage( &appMessage );
+      DispatchMessage( &appMessage );
+
+      return 1;
+    }
+  }
+
   return 0;
-}
-
-/*
- *  WinMain to main adapter
- */
-
-extern int main( int argc, char** argv );
-
-int WINAPI wWinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
-  PWSTR pCmdLine, int nCmdShow ) {
-
-  w32AppInstance = hInstance;
-  w32AppPrevInstance = hPrevInstance;
-  w32AppCmdShow = nCmdShow;
-
-  int argc = 0;
-  char** argv = NULL;
-
-  return main(argc, argv);
 }

@@ -10,10 +10,6 @@ typedef struct L2DWin32App {
   HWND window;
 } L2DWin32App;
 
-extern HINSTANCE w32AppInstance;
-extern HINSTANCE w32AppPrevInstance;
-extern int w32AppCmdShow;
-
 unsigned GetDesktopResolution( unsigned* width, unsigned* height,
   unsigned* bpp );
 
