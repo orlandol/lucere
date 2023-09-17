@@ -12,55 +12,44 @@ typedef struct LucereAppImpl LucereApp;
 typedef struct LucereDisplayImpl LucereDisplay;
 
 /*
+ *  Required platform specific declarations
+ */
+#ifdef _WIN32
+
+#include "windows.h"
+
+typedef WNDPROC LucereEventRouter;
+
+#define LUC_DECLARE_EVENTROUTER(name) \
+  LRESULT name( HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam );
+
+#define LUC_BEGIN_EVENTROUTER_IMPLEMENTATION(name) \
+  LRESULT name( HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam ) {
+
+#define LUC_END_EVENTROUTER_IMPLEMENTATION() \
+    return DefWindowProc(hWnd, Msg, wParam, lParam); \
+  }
+#endif // _WIN32
+
+/*
  *  Abstract declarations
  */
 
-LucereApp* lucCreateApp( const char* title, unsigned width, unsigned height,
-  unsigned flags, LucereEventRouter customRouter );
-
-void lucReleaseApp( LucereApp** appPtr );
-
-void lucExitApp( unsigned returnCode );
-
-unsigned lucRouteEvents( LucereApp* app );
-
 typedef struct GraphicsInterface {
 } GraphicsInterface;
-
-///TODO: Define OS specific macros to abstract event routers
-typedef void (*LucereEventRouter)();
-
-enum AppCreateResult {
-  appCreateSuccess = 0,
-  appCreateErrorInTitle = 1,
-  appCreateErrorInWidth = 2,
-  appCreateErrorInHeight = 3,
-  appCreateErrorInFlags = 4,
-  appCreateErrorInEventRouter = 5,
-};
 
 /*
  *  App declarations
  */
 
 // Abstract app declarations
-LucereApp* appCreate( const char* title, unsigned width, unsigned height,
-  unsigned flags, LucereEventRouter eventRouter );
+LucereApp* lucCreateApp( const char* title, unsigned width, unsigned height,
+  unsigned flags, LucereEventRouter customRouter );
+unsigned lucReleaseApp( LucereApp** appPtr );
 
-int appRelease( LucereApp** appPointer );
+unsigned lucExitApp( unsigned returnCode );
 
-// Win32 app declarations
-LucereApp* win32AppCreate( const char* title, unsigned width, unsigned height,
-  unsigned flags, LucereEventRouter eventRouter );
-
-int win32AppRelease( LucereApp** appPointer );
-
-/*
- *  Win32 GDI specific display declarations
- */
-LucereDisplay* win32GdiDisplayCreate( LucereApp* app, unsigned monitorID,
-  GraphicsInterface* graphicsSystem );
-
-int win32GdiDisplayRelease( LucereDisplay** displayPtr );
+unsigned lucRouteEvents( LucereApp* app );
+unsigned lucPauseForEvents( LucereApp* app );
 
 #endif
