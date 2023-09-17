@@ -15,6 +15,15 @@ typedef struct LucereDisplayImpl LucereDisplay;
  *  Abstract declarations
  */
 
+LucereApp* lucCreateApp( const char* title, unsigned width, unsigned height,
+  unsigned flags, LucereEventRouter customRouter );
+
+void lucReleaseApp( LucereApp** appPtr );
+
+void lucExitApp( unsigned returnCode );
+
+unsigned lucRouteEvents( LucereApp* app );
+
 typedef struct GraphicsInterface {
 } GraphicsInterface;
 
@@ -37,11 +46,13 @@ enum AppCreateResult {
 // Abstract app declarations
 LucereApp* appCreate( const char* title, unsigned width, unsigned height,
   unsigned flags, LucereEventRouter eventRouter );
+
 int appRelease( LucereApp** appPointer );
 
 // Win32 app declarations
 LucereApp* win32AppCreate( const char* title, unsigned width, unsigned height,
   unsigned flags, LucereEventRouter eventRouter );
+
 int win32AppRelease( LucereApp** appPointer );
 
 /*
@@ -49,6 +60,7 @@ int win32AppRelease( LucereApp** appPointer );
  */
 LucereDisplay* win32GdiDisplayCreate( LucereApp* app, unsigned monitorID,
   GraphicsInterface* graphicsSystem );
+
 int win32GdiDisplayRelease( LucereDisplay** displayPtr );
 
 #endif

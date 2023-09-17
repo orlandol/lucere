@@ -1,2 +1,2 @@
 @echo off
-ev lucere.h lucimpl.h lucgdi.h lucere.c lucimpl.c w32app.c lucgdi.c
+ev lucere.h lucimpl.h w32app.h w32gdi.h lucere.c lucimpl.c w32app.c w32gdi.c
