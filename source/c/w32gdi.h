@@ -4,9 +4,9 @@
 /*
  *  Win32 GDI display declarations
  */
-LucereDisplay* win32GdiDisplayCreate( LucereApp* app, unsigned monitorID,
-  GraphicsInterface* graphicsSystem );
-unsigned win32GdiDisplayRelease( LucereDisplay** displayPtr );
+LucDisplay* win32GdiDisplayCreate( LucApp* app, unsigned monitorIndex,
+  LucGraphicsInterface* graphicsSystem );
+unsigned win32GdiDisplayRelease( LucDisplay** displayPtr );
 
 
 #endif

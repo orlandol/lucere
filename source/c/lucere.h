@@ -6,10 +6,10 @@
  */
 
 // App state structure
-typedef struct LucereAppImpl LucereApp;
+typedef struct LucAppImpl LucApp;
 
 // Display state structure
-typedef struct LucereDisplayImpl LucereDisplay;
+typedef struct LucDisplayImpl LucDisplay;
 
 /*
  *  Required platform specific declarations
@@ -18,7 +18,7 @@ typedef struct LucereDisplayImpl LucereDisplay;
 
 #include "windows.h"
 
-typedef WNDPROC LucereEventRouter;
+typedef WNDPROC LucEventRouter;
 
 #define LUC_DECLARE_EVENTROUTER(name) \
   LRESULT name( HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam );
@@ -35,21 +35,26 @@ typedef WNDPROC LucereEventRouter;
  *  Abstract declarations
  */
 
-typedef struct GraphicsInterface {
-} GraphicsInterface;
+typedef LucDisplay* (*LucCreateDisplayFunc)( LucApp* app, struct LucGraphicsInterface* graphics );
+typedef unsigned (*LucReleaseDisplayFunc)( LucDisplay** displayPtr );
+
+typedef struct LucGraphicsInterface {
+  LucCreateDisplayFunc createDisplay;
+  LucReleaseDisplayFunc releaseDisplay;
+} LucGraphicsInterface;
 
 /*
  *  App declarations
  */
 
 // Abstract app declarations
-LucereApp* lucCreateApp( const char* title, unsigned width, unsigned height,
-  unsigned flags, LucereEventRouter customRouter );
-unsigned lucReleaseApp( LucereApp** appPtr );
+LucApp* lucCreateApp( const char* title, unsigned width, unsigned height,
+  unsigned flags, LucEventRouter eventRouter );
+unsigned lucReleaseApp( LucApp** appPtr );
 
 unsigned lucExitApp( unsigned returnCode );
 
-unsigned lucRouteEvents( LucereApp* app );
-unsigned lucPauseForEvents( LucereApp* app );
+unsigned lucRouteEvents( LucApp* app );
+unsigned lucPauseForEvents( LucApp* app );
 
 #endif

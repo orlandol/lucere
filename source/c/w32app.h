@@ -7,10 +7,10 @@
  *  Win32 app declarations
  */
 
-typedef struct LucereAppImpl {
+typedef struct LucAppImpl {
   size_t structSize;
   HANDLE winHandle;
   HINSTANCE winInstance;
-} LucereAppImpl;
+} Win32AppImpl;
 
 #endif

@@ -7,13 +7,13 @@
  *  App implementation
  */
 
-LucereApp* lucCreateApp( const char* title, unsigned width, unsigned height,
-  unsigned flags, LucereEventRouter customRouter ) {
+LucApp* lucCreateApp( const char* title, unsigned width, unsigned height,
+  unsigned flags, LucEventRouter customRouter ) {
 
   return NULL;
 }
 
-unsigned lucReleaseApp( LucereApp** appPtr ) {
+unsigned lucReleaseApp( LucApp** appPtr ) {
   return 2;
 }
 
@@ -21,10 +21,10 @@ unsigned lucExitApp( unsigned returnCode ) {
   return 2;
 }
 
-unsigned lucRouteEvents( LucereApp* app ) {
+unsigned lucRouteEvents( LucApp* app ) {
   return 2;
 }
 
-unsigned lucPauseForEvents( LucereApp* app ) {
+unsigned lucPauseForEvents( LucApp* app ) {
   return 2;
 }
