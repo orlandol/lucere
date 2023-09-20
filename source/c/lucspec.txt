@@ -1,0 +1,92 @@
+
+------------------
+Lucere Design Spec
+By Orlando Llanes
+Updated 9/20/23
+------------------
+
+Purpose: Provide a stable foundation for games and multimedia software.
+
+Funding: Commercial projects. Consulting. Donations.
+
+License: Permissive Open Source, forever.
+
+Design goals:
+- Develop for commercial quality.
+- Provide a conceptual and uniform abstraction.
+- Provide a thin layer on top of the operating system and its subsystems.
+- Implement various subsystems which can be selected at runtime.
+- Provide access to the internals to extend subsystems.
+- Enable 2D and 3D to coexist.
+- Provide bridges between dependant subsystems.
+- Choose accelerated and optimal subsystems at runtime.
+- Check for errors throughout.
+
+============================
+= Windows Graphics Systems =
+============================
+Software
+Win32 GDI
+OpenGL 4
+OpenGL 3
+OpenGL 2
+Vulkan
+DirectX 12
+Direct3D 11
+Direct3D 10
+Direct3D 9
+Direct3D 8
+DirectX 7
+DirectX 5
+WinG
+
+========================
+= Mac Graphics Systems =
+========================
+Software
+Metal
+OpenGL 4
+OpenGL 3
+OpenGL 2
+
+==========================
+= Linux Graphics Systems =
+==========================
+Software
+Vulkan
+OpenGL 4
+OpenGL 3
+OpenGL 2
+Framebuffer
+Wayland
+Mir(?)
+X Windows
+
+===========================
+= MS-DOS Graphics Systems =
+===========================
+VBE 2
+VBE 1.2
+Mode 13h
+EGA
+CGA
+
+=========================
+= Application Interface =
+=========================
+LucApp* lucCreateApp( const char* title, unsigned width, unsigned height,
+    unsigned flags, LucEventRouter eventRouter )
+
+unsigned lucReleaseApp( LucApp** appPointer )
+
+======================
+= Graphics Interface =
+======================
+
+===================
+= Image Interface =
+===================
+
+===================
+= World Interface =
+===================
