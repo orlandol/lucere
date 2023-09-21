@@ -4,9 +4,13 @@
 /*
  *  Win32 GDI display declarations
  */
-LucDisplay* win32GdiDisplayCreate( LucApp* app, unsigned monitorIndex,
-  LucGraphicsInterface* graphicsSystem );
-unsigned win32GdiDisplayRelease( LucDisplay** displayPtr );
+
+unsigned gdiDisplayCount( LucApp* app );
+
+LucDisplay* gdiDisplayCreate( LucApp* app, unsigned monitorIndex,
+  LucGraphicsSystem* graphicsSystem );
+
+unsigned gdiDisplayRelease( LucDisplay** displayPtr );
 
 
 #endif

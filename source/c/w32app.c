@@ -25,6 +25,6 @@ unsigned lucRouteEvents( LucApp* app ) {
   return 2;
 }
 
-unsigned lucPauseForEvents( LucApp* app ) {
+unsigned lucWaitForNextEvent( LucApp* app ) {
   return 2;
 }

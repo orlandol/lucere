@@ -32,29 +32,48 @@ typedef WNDPROC LucEventRouter;
 #endif // _WIN32
 
 /*
- *  Abstract declarations
+ *  Abstract Graphics declarations
  */
 
-typedef LucDisplay* (*LucCreateDisplayFunc)( LucApp* app, struct LucGraphicsInterface* graphics );
+// Graphics system declarations
+typedef unsigned (*LucDisplayCountFunc)( LucApp* app );
+
+typedef LucDisplay* (*LucCreateDisplayFunc)( LucApp* app,
+  unsigned monitorIndex, struct LucGraphicsSystem* graphics );
+
 typedef unsigned (*LucReleaseDisplayFunc)( LucDisplay** displayPtr );
 
-typedef struct LucGraphicsInterface {
+typedef struct LucGraphicsSystem {
+  LucDisplayCountFunc displayCount;
   LucCreateDisplayFunc createDisplay;
   LucReleaseDisplayFunc releaseDisplay;
-} LucGraphicsInterface;
+} LucGraphicsSystem;
 
 /*
- *  App declarations
+ *  Abstract App declarations
  */
 
 // Abstract app declarations
 LucApp* lucCreateApp( const char* title, unsigned width, unsigned height,
   unsigned flags, LucEventRouter eventRouter );
+
 unsigned lucReleaseApp( LucApp** appPtr );
 
 unsigned lucExitApp( unsigned returnCode );
 
 unsigned lucRouteEvents( LucApp* app );
-unsigned lucPauseForEvents( LucApp* app );
+
+unsigned lucWaitForNextEvent( LucApp* app );
+
+/*
+ *  Abstract Display declarations
+ */
+
+unsigned lucDisplayCount( LucApp* app );
+
+LucDisplay* lucCreateDisplay( LucApp* app,
+  unsigned monitorIndex, LucGraphicsSystem* graphics );
+
+unsigned lucReleaseDisplay( LucDisplay** displayPtr );
 
 #endif

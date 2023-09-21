@@ -1,15 +1,14 @@
 
-------------------
-Lucere Design Spec
-By Orlando Llanes
-Updated 9/20/23
-------------------
+========================================
+= Lucere Design Spec by Orlando Llanes =
+= Updated 9/20/23                      =
+========================================
 
 Purpose: Provide a stable foundation for games and multimedia software.
 
 Funding: Commercial projects. Consulting. Donations.
 
-License: Permissive Open Source, forever.
+License: Always permissive Open Source.
 
 Design goals:
 - Develop for commercial quality.
@@ -21,6 +20,8 @@ Design goals:
 - Provide bridges between dependant subsystems.
 - Choose accelerated and optimal subsystems at runtime.
 - Check for errors throughout.
+- Invert dependencies for dead code elimination.
+- Minimize dependencies between unrelated subsystems for modularity.
 
 ============================
 = Windows Graphics Systems =
@@ -74,14 +75,49 @@ CGA
 =========================
 = Application Interface =
 =========================
-LucApp* lucCreateApp( const char* title, unsigned width, unsigned height,
-    unsigned flags, LucEventRouter eventRouter )
 
-unsigned lucReleaseApp( LucApp** appPointer )
+LucApp* lucCreateApp( const char* title, unsigned width, unsigned height,
+    unsigned flags, LucEventRouter eventRouter );
+
+unsigned lucReleaseApp( LucApp** appPointer );
+
+unsigned lucExitApp( unsigned returnCode );
+
+unsigned lucRouteEvents( LucApp* app );
+
+unsigned lucWaitForNextEvent( LucApp* app );
 
 ======================
 = Graphics Interface =
 ======================
+
+typedef struct LucGraphicsInterface {
+  LucDisplayCountFunc displayCount;
+  LucCreateDisplayFunc createDisplay;
+  LucReleaseDisplayFunc releaseDisplay;
+} LucGraphicsInterface;
+
+=====================
+= Display Interface =
+=====================
+
+unsigned lucDisplayCount( LucApp* app );
+
+LucDisplay* lucCreateDisplay( LucApp* app,
+  unsigned monitorIndex, LucGraphicsSystem* graphics );
+
+unsigned lucReleaseDisplay( LucDisplay** displayPtr );
+
+===============================
+= Win32 GDI Display Interface =
+===============================
+
+unsigned gdiDisplayCount( LucApp* app );
+
+LucDisplay* gdiDisplayCreate( LucApp* app, unsigned monitorIndex,
+  LucGraphicsInterface* graphicsSystem );
+
+unsigned gdiDisplayRelease( LucDisplay** displayPtr );
 
 ===================
 = Image Interface =
