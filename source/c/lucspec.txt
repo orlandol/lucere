@@ -11,7 +11,7 @@ Funding: Commercial projects. Consulting. Donations.
 License: Always permissive Open Source.
 
 Design goals:
-- Develop for commercial quality.
+- Follow best practices to achieve commercial quality.
 - Provide a conceptual and uniform abstraction.
 - Provide a thin layer on top of the operating system and its subsystems.
 - Implement various subsystems which can be selected at runtime.
@@ -22,6 +22,8 @@ Design goals:
 - Invert dependencies for dead code elimination.
 - Minimize dependencies between unrelated subsystems for modularity.
 - Graphics modes where 2D and 3D can coexist.
+- Structure source to "just work".
+- Design for forward and backward compatibility.
 
 ============================
 = Windows Graphics Systems =
@@ -91,29 +93,143 @@ unsigned lucRouteEvents( LucApp* app );
 unsigned lucWaitForNextEvent( LucApp* app );
 
 ======================
+= Graphics Hierarchy =
+======================
+
+LucApp = [System]App
+|
+-> LucDisplay = [System]Display1, ..., [System]DisplayN
+   |
+   -> LucCanvas = [System]Canvas1, ..., [System]CanvasN
+      |
+      -> LucSurface
+      |
+      -> LucImage = [System]Image1, ..., [System]ImageN
+      |  |
+      |  -> LucSurface
+      |
+      -> LucMask = [System]Mask1, ..., [System]MaskN
+         |
+         -> LucSurface
+
+======================
 = Graphics Interface =
 ======================
 
 #include "lucimpl.h"
 
 typedef struct LucGraphicsSystem {
-  // Display interface
+  // Display creators and helpers
   LucDisplayCountFunc displayCount;
   LucCreateDisplayFunc createDisplay;
+
+  // Display interface
   LucReleaseDisplayFunc releaseDisplay;
   LucCenterCanvasFunc centerCanvas;
   LucFitCanvasHFunc fitCanvasH;
   LucFitCanvasVFunc fitCanvasV;
   LucStretchCanvasFunc stretchCanvas;
 
+  LucCreateCanvasFunc createCanvas;
+
   // Canvas interface
+  LucReleaseCanvasFunc releaseCanvas;
 
+  // Canvas primitive function selectors
+  LucRetrievePixelAtFunc retrievePixelAt;
+  LucRetrieveDrawPixelFunc retrieveDrawPixel;
+  LucRetrieveBlendPixelFunc retrieveBlendPixel;
 
-  // Blitters
+  LucRetrieveDrawCircleFunc retrieveDrawCircle;
+  LucRetrieveFillCircleFunc retrieveFillCircle;
+  LucRetrieveBlendCircleFunc retrieveBlendCircle;
 
-  // Primitives
+  LucRetrieveDrawEllipseFunc retrieveDrawEllipse;
+  LucRetrieveFillEllipseFunc retrieveFillEllipse;
+  LucRetrieveBlendEllipseFunc retrieveBlendEllipse;
+
+  LucRetrieveDrawRectFunc retrieveDrawRect;
+  LucRetrieveFillRectFunc retrieveFillRect;
+  LucRetrieveBlendRectFunc retrieveBlendRect;
+
+  // Canvas primitives
+  LucPixelAtFunc pixelAt;
+  LucDrawPixelFunc drawPixel;
+  LucBlendPixelFunc blendPixel;
+
+  LucDrawCircleFunc drawCircle;
+  LucFillCircleFunc fillCircle;
+  LucBlendCircleFunc blendCircle;
+
+  LucDrawEllipseFunc drawEllipse;
+  LucFillEllipseFunc fillEllipse;
+  LucBlendEllipseFunc blendEllipse;
+
+  LucDrawRectFunc drawRect;
+  LucFillRectFunc fillRect;
+  LucBlendRectFunc blendRect;
+
+  // Canvas blitter function selectors
+  LucRetrieveDrawImageFunc retrieveDrawImage;
+  LucRetrieveDrawImageHFunc retrieveDrawImageH;
+  LucRetrieveDrawImageVFunc retrieveDrawImageV;
+  LucRetrieveDrawImageHVFunc retrieveDrawImageHV;
+  LucRetrieveDrawImageRSFunc retrieveDrawImageRS;
+
+  LucRetrieveTransImageFunc retrieveTransImage;
+  LucRetrieveTransImageHFunc retrieveTransImageH;
+  LucRetrieveTransImageVFunc retrieveTransImageV;
+  LucRetrieveTransImageHVFunc retrieveTransImageHV;
+  LucRetrieveTransImageRSFunc retrieveTransImageRS;
+
+  LucRetrieveBlendImageFunc retrieveBlendImage;
+  LucRetrieveBlendImageHFunc retrieveBlendImageH;
+  LucRetrieveBlendImageVFunc retrieveBlendImageV;
+  LucRetrieveBlendImageHVFunc retrieveBlendImageHV;
+  LucRetrieveBlendImageRSFunc retrieveBlendImageRS;
+
+  LucRetrieveDrawRLE0Func retrieveDrawRLE0;
+  LucRetrieveDrawRLE0HFunc retrieveDrawRLE0H;
+  LucRetrieveDrawRLE0VFunc retrieveDrawRLE0V;
+  LucRetrieveDrawRLE0HVFunc retrieveDrawRLE0HV;
+  LucRetrieveDrawRLE0RSFunc retrieveDrawRLE0RS;
+
+  LucRetrieveTransRLE0Func retrieveTransRLE0;
+  LucRetrieveTransRLE0HFunc retrieveTransRLE0H;
+  LucRetrieveTransRLE0VFunc retrieveTransRLE0V;
+  LucRetrieveTransRLE0HVFunc retrieveTransRLE0HV;
+  LucRetrieveTransRLE0RSFunc retrieveTransRLE0RS;
+
+  LucRetrieveBlendRLE0Func retrieveBlendRLE0;
+  LucRetrieveBlendRLE0HFunc retrieveBlendRLE0H;
+  LucRetrieveBlendRLE0VFunc retrieveBlendRLE0V;
+  LucRetrieveBlendRLE0HVFunc retrieveBlendRLE0HV;
+  LucRetrieveBlendRLE0RSFunc retrieveBlendRLE0RS;
+
+  LucRetrieveDrawMaskFunc retrieveDrawMask;
+  LucRetrieveDrawMaskHFunc retrieveDrawMaskH;
+  LucRetrieveDrawMaskVFunc retrieveDrawMaskV;
+  LucRetrieveDrawMaskHVFunc retrieveDrawMaskHV;
+  LucRetrieveDrawMaskRSFunc retrieveDrawMaskRS;
+
+  LucRetrieveTransMaskFunc retrieveTransMask;
+  LucRetrieveTransMaskHFunc retrieveTransMaskH;
+  LucRetrieveTransMaskVFunc retrieveTransMaskV;
+  LucRetrieveTransMaskHVFunc retrieveTransMaskHV;
+  LucRetrieveTransMaskRSFunc retrieveTransMaskRS;
+
+  LucRetrieveBlendMaskFunc retrieveBlendMask;
+  LucRetrieveBlendMaskHFunc retrieveBlendMaskH;
+  LucRetrieveBlendMaskVFunc retrieveBlendMaskV;
+  LucRetrieveBlendMaskHVFunc retrieveBlendMaskHV;
+  LucRetrieveBlendMaskRSFunc retrieveBlendMaskRS;
+
+  // Canvas blitters
 
   // Surface interface
+  LucCanvasSurfaceTypeFunc canvasSurfaceType;
+  LucBeginSurfaceFunc beginSurface;
+  LucEndSurfaceFunc endSurface;
 } LucGraphicsSystem;
 
 =====================
@@ -121,6 +237,17 @@ typedef struct LucGraphicsSystem {
 =====================
 
 #include "lucere.h"
+
+typedef struct LucDisplay {
+  // Base header
+  size_t structSize;
+
+  LucReleaseDisplayFunc releaseDisplay;
+  LucCenterCanvasFunc centerCanvas;
+  LucFitCanvasHFunc fitCanvasH;
+  LucFitCanvasVFunc fitCanvasV;
+  LucStretchCanvasFunc stretchCanvas;
+} LucDisplay;
 
 unsigned lucDisplayCount( LucApp* app );
 
@@ -144,6 +271,7 @@ unsigned lucStretchCanvas( LucDisplay* display, LucCanvas* canvas );
 #include "lucimpl.h"
 
 const LucDisplay Win32Display = {
+  // Base header
   sizeof(HBITMAP),
 
   gdiReleaseDisplay,
@@ -151,6 +279,9 @@ const LucDisplay Win32Display = {
   gdiFitCanvasH,
   gdiFitCanvasV,
   gdiStretchCanvas
+
+  // Win32 extensions
+  HBITMAP dibSection,
 };
 
 unsigned gdiDisplayCount( LucApp* app );
@@ -169,6 +300,24 @@ unsigned gdiFitCanvasH( LucDisplay* display, LucCanvas* canvas );
 unsigned gdiFitCanvasV( LucDisplay* display, LucCanvas* canvas );
 
 unsigned gdiStretchCanvas( LucDisplay* display, LucCanvas* canvas );
+
+=================
+= I/O Hierarchy =
+=================
+
+LucIO
+|
+-> LucFile = [System]File, LucMappedFile, ...
+|
+-> LucMemFile = [Optimized]MemFile, ...
+|
+-> LucDataArchive
+|  |
+|  -> LucDataFile
+|
+-> LucVirtualFS
+   |
+   -> LucVirtualFile
 
 =================
 = I/O Interface =
