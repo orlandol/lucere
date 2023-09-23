@@ -1,7 +1,7 @@
 
 ========================================
 = Lucere Design Spec by Orlando Llanes =
-= Updated 9/22/23                      =
+= Updated 9/23/23                      =
 ========================================
 
 Purpose: Provide a stable foundation for games and multimedia software.
@@ -94,9 +94,10 @@ unsigned lucWaitForNextEvent( LucApp* app );
 = Graphics Interface =
 ======================
 
-#include "lucere.h"
+#include "lucimpl.h"
 
-typedef struct LucGraphicsInterface {
+typedef struct LucGraphicsSystem {
+  // Display interface
   LucDisplayCountFunc displayCount;
   LucCreateDisplayFunc createDisplay;
   LucReleaseDisplayFunc releaseDisplay;
@@ -104,21 +105,22 @@ typedef struct LucGraphicsInterface {
   LucFitCanvasHFunc fitCanvasH;
   LucFitCanvasVFunc fitCanvasV;
   LucStretchCanvasFunc stretchCanvas;
-} LucGraphicsInterface;
+
+  // Canvas interface
+
+
+  // Blitters
+
+  // Primitives
+
+  // Surface interface
+} LucGraphicsSystem;
 
 =====================
 = Display Interface =
 =====================
 
 #include "lucere.h"
-
-typedef struct LucDisplay {
-  LucReleaseDisplayFunc releaseDisplay;
-  LucCenterCanvasFunc centerCanvas;
-  LucFitCanvasHFunc fitCanvasH;
-  LucFitCanvasVFunc fitCanvasV;
-  LucStretchCanvasFunc stretchCanvas;
-} LucDisplay;
 
 unsigned lucDisplayCount( LucApp* app );
 
@@ -139,10 +141,11 @@ unsigned lucStretchCanvas( LucDisplay* display, LucCanvas* canvas );
 = Win32 GDI Display Interface =
 ===============================
 
-#include "lucere.h"
 #include "lucimpl.h"
 
 const LucDisplay Win32Display = {
+  sizeof(HBITMAP),
+
   gdiReleaseDisplay,
   gdiCenterCanvas,
   gdiFitCanvasH,
@@ -171,68 +174,145 @@ unsigned gdiStretchCanvas( LucDisplay* display, LucCanvas* canvas );
 = I/O Interface =
 =================
 
-#include "lucere.h"
+#include "lucimpl.h"
+
+typedef struct LucFileImpl {
+  size_t structSize;
+
+  LucIOCurPosFunc curPos;
+  LucIOSeekFunc setSeek;
+  LucIOReadBlockFunc read;
+  LucIOWriteBlockFunc write;
+
+  HANDLE fileHandle;
+  fpos_t filePos;
+} LucFileImpl;
 
 typedef struct LucIO {
-  LucFilePositionFunc getFilePosition;
-  LucSetFilePositionFunc setFilePosition;
-  LucReadBlockFunc read;
-  LucWriteBlockFunc write;
+  0,
+
+  LucIOCurPosFunc curPos;
+  LucIOSeekFunc setSeek;
+  LucIOReadBlockFunc read;
+  LucIOWriteBlockFunc write;
 } LucIO;
 
-typedef struct LucIORead {
+typedef struct LucFile {
+  0,
+
   LucFilePositionFunc getFilePosition;
   LucSetFilePositionFunc setFilePosition;
   LucReadBlockFunc read;
-} LucIORead;
+} LucFile;
 
-typedef struct LucIOWrite {
-  LucFilePositionFunc getFilePosition;
-  LucSetFilePositionFunc setFilePosition;
-  LucWriteBlockFunc write;
-} LucIOWrite;
+size_t lucFilePosition
 
 ======================
 = File I/O Interface =
 ======================
 
-#include "lucere.h"
+#include "lucimpl.h"
 
-const LucIO LucFileIO = {
+static const LucIO LucFile = {
+  0,
+
   lucFilePosition,
   lucSetFilePosition,
   lucFileRead,
   lucFileWrite
 };
 
-const LucIO LucFileRead = {
+static const LucIO LucFileReadOnly = {
+  0,
+
   lucFilePosition,
   lucSetFilePosition,
-  lucFileRead
+  lucFileRead,
+  lucIONoWrite
 };
 
-const LucIO LucFileWrite = {
-  lucFilePosition,
-  lucSetFilePosition,
-  lucFileWrite
-};
+#include "lucere.h"
+
+LucIO* lucOpenFile( const char* fileName );
+
+LucIO* lucUpdateFile( const char* fileName );
+
+LucIO* lucCreateFile( const char* fileName );
+
+unsigned lucCloseFile( LucIO** filePointer );
 
 ========================
 = Image File Interface =
 ========================
 
-#include "lucere.h"
+#include "lucimpl.h"
 
 typedef struct ImageReader {
-  LucIO* io;
+  sizeof(LucIO),
 
   LucReadImageLine1Func readLine1;
   LucReadImageLine8Func readLine8;
   LucReadImageLine16Func readLine16;
   LucReadImageLine24Func readLine24;
   LucReadImageLine32Func readLine32;
+
+  LucIO* fileIO;
 } ImageReader;
 
+#include "lucere.h"
+
+unsigned lucReadLine1( ImageReader* sourceImage, uint8* pixelBuffer,
+  LucPixelFormat* pixelFormat, size_t pixelOffset, size_t pixelCount,
+  LucQuantizer* quantizer );
+
+unsigned lucReadLine8( ImageReader* sourceImage, uint8* pixelBuffer,
+  LucPixelFormat* pixelFormat, size_t pixelOffset, size_t pixelCount,
+  LucQuantizer* quantizer );
+
+unsigned lucReadLine16( ImageReader* sourceImage, uint8* pixelBuffer,
+  LucPixelFormat* pixelFormat, size_t pixelOffset, size_t pixelCount,
+  LucQuantizer* quantizer );
+
+unsigned lucReadLine24( ImageReader* sourceImage, uint8* pixelBuffer,
+  LucPixelFormat* pixelFormat, size_t pixelOffset, size_t pixelCount,
+  LucQuantizer* quantizer );
+
+unsigned lucReadLine32( ImageReader* sourceImage, uint8* pixelBuffer,
+  LucPixelFormat* pixelFormat, size_t pixelOffset, size_t pixelCount,
+  LucQuantizer* quantizer );
+
+LucImage* lucLoadImage1( ImageReader* sourceImage, LucRect* sourceRect,
+  LucCanvas* canvas, LucQuantizer* quantizer );
+
+LucImage* lucLoadImage8( ImageReader* sourceImage, LucRect* sourceRect,
+  LucCanvas* canvas, LucQuantizer* quantizer );
+
+LucImage* lucLoadImage16( ImageReader* sourceImage, LucRect* sourceRect,
+  LucCanvas* canvas, LucQuantizer* quantizer );
+
+LucImage* lucLoadImage24( ImageReader* sourceImage, LucRect* sourceRect,
+  LucCanvas* canvas, LucQuantizer* quantizer );
+
+LucImage* lucLoadImage32( ImageReader* sourceImage, LucRect* sourceRect,
+  LucCanvas* canvas, LucQuantizer* quantizer );
+
+#include "lucere.h"
+
+// Load Lucere format image/mask from file
+LucImage* lucLoadRawImage( LucIO* sourceIO, LucRect* sourceRect,
+  LucCanvas* canvas, LucQuantizer* quantizer );
+
+LucImage* lucLoadRawRLE0( LucIO* sourceIO, LucRect* sourceRect,
+  LucCanvas* canvas, LucQuantizer* quantizer );
+
+LucImage* lucLoadRawMask( LucIO* sourceIO, LucRect* sourceRect,
+  unsigned colorBit0, unsigned colorBit1,
+  LucCanvas* canvas, LucQuantizer* quantizer );
+
+// Load 32-bit RGBA palette from file
+unsigned lucLoadRawPalette( LucIO* sourceIO, LucCanvas* canvas );
+
+// Load external format into Lucere format image/mask
 LucImage* lucLoadImage( ImageReader* sourceImage, LucRect* sourceRect,
   LucCanvas* canvas, LucQuantizer* quantizer );
 
@@ -240,6 +320,7 @@ LucImage* lucLoadRLE0( ImageReader* sourceImage, LucRect* sourceRect,
   LucCanvas* canvas, LucQuantizer* quantizer );
 
 LucImage* lucLoadMask( ImageReader* sourceImage, LucRect* sourceRect,
+  unsigned colorBit0, unsigned colorBit1,
   LucCanvas* canvas, LucQuantizer* quantizer );
 
 unsigned lucLoadCanvas( ImageReader* sourceImage, LucRect* sourceRect,
@@ -247,6 +328,8 @@ unsigned lucLoadCanvas( ImageReader* sourceImage, LucRect* sourceRect,
 
 LucSurface* lucLoadSurface( ImageReader* sourceImage, LucRect* sourceRect,
   LucCanvas* canvas, LucQuantizer* quantizer );
+
+#include "lucimpl.h"
 
 typedef struct ImageWriter {
   LucIO* io;
@@ -258,20 +341,24 @@ typedef struct ImageWriter {
   LucWriteImageLine32Func writeLine32;
 } ImageWriter;
 
-unsigned lucSaveImage( ImageReader* sourceImage, LucRect* sourceRect,
+unsigned lucWriteImageLine1( ImageWriter* destImage,
+
+#include "lucere.h"
+
+unsigned lucSaveImage( ImageWriter* destImage, LucRect* destRect,
   LucImage* image, LucQuantizer* quantizer );
 
-unsigned lucSaveRLE0( ImageReader* sourceImage, LucRect* sourceRect,
+unsigned lucSaveRLE0( ImageWriter* destImage, LucRect* destRect,
   LucImage* image, LucQuantizer* quantizer );
 
-unsigned lucSaveMask( ImageReader* sourceImage, LucRect* sourceRect,
+unsigned lucSaveMask( ImageWriter* destImage, LucRect* destRect,
   LucImage* image, unsigned bitClearColor, unsigned bitSetColor,
   LucQuantizer* quantizer );
 
-unsigned lucSaveCanvas( ImageReader* sourceImage, LucRect* sourceRect,
+unsigned lucSaveCanvas( ImageWriter* destImage, LucRect* destRect,
   LucCanvas* canvas, LucQuantizer* quantizer );
 
-unsigned lucSaveSurface( ImageWriter* sourceImage, LucRect* sourceRect,
+unsigned lucSaveSurface( ImageWriter* destImage, LucRect* destRect,
   LucSurface* surface, LucSurfaceInfo* surfaceInfo,
   LucQuantizer* quantizer );
 
