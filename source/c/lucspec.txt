@@ -1,6 +1,6 @@
 ========================================
 = Lucere Design Spec by Orlando Llanes =
-=                      Updated 9/24/23 =
+=                      Updated 9/25/23 =
 ========================================
 
 Purpose: Provide a stable foundation for games and multimedia software.
@@ -140,86 +140,6 @@ typedef struct LucGraphicsSystem {
   LucAccessCanvasSurfaceFunc accessCanvasSurface;
   LucReleaseCanvasSurfaceFunc releaseCanvasSurface;
 
-  // Canvas primitive function selectors
-  LucSelectPixelAtFunc selectPixelAt;
-  LucSelectDrawPixelFunc selectDrawPixel;
-  LucSelectBlendPixelFunc selectBlendPixel;
-
-  LucSelectDrawCircleFunc selectDrawCircle;
-  LucSelectFillCircleFunc selectFillCircle;
-  LucSelectBlendCircleFunc selectBlendCircle;
-  LucSelectBlendfillCircleFunc selectBlendfillCircle;
-
-  LucSelectDrawEllipseFunc selectDrawEllipse;
-  LucSelectFillEllipseFunc selectFillEllipse;
-  LucSelectBlendEllipseFunc selectBlendEllipse;
-  LucSelectBlendfillEllipseFunc selectBlendfillEllipse;
-
-  LucSelectDrawRectFunc selectDrawRect;
-  LucSelectFillRectFunc selectFillRect;
-  LucSelectBlendRectFunc selectBlendRect;
-  LucSelectBlendfillRectFunc selectBlendfillRect;
-
-  LucSelectDrawPolyFunc selectDrawPoly;
-  LucSelectFillPolyFunc selectFillPoly;
-  LucSelectBlendPolyFunc selectBlendPoly;
-  LucSelectBlendfillPolyFunc selectBlendfillPoly;
-
-  // Canvas blitter function selectors
-  LucSelectDrawImageFunc selectDrawImage;
-  LucSelectDrawImageHFunc selectDrawImageH;
-  LucSelectDrawImageVFunc selectDrawImageV;
-  LucSelectDrawImageHVFunc selectDrawImageHV;
-  LucSelectDrawImageRSFunc selectDrawImageRS;
-
-  LucSelectTransImageFunc selectTransImage;
-  LucSelectTransImageHFunc selectTransImageH;
-  LucSelectTransImageVFunc selectTransImageV;
-  LucSelectTransImageHVFunc selectTransImageHV;
-  LucSelectTransImageRSFunc selectTransImageRS;
-
-  LucSelectBlendImageFunc selectBlendImage;
-  LucSelectBlendImageHFunc selectBlendImageH;
-  LucSelectBlendImageVFunc selectBlendImageV;
-  LucSelectBlendImageHVFunc selectBlendImageHV;
-  LucSelectBlendImageRSFunc selectBlendImageRS;
-
-  LucSelectDrawRLE0Func selectDrawRLE0;
-  LucSelectDrawRLE0HFunc selectDrawRLE0H;
-  LucSelectDrawRLE0VFunc selectDrawRLE0V;
-  LucSelectDrawRLE0HVFunc selectDrawRLE0HV;
-  LucSelectDrawRLE0RSFunc selectDrawRLE0RS;
-
-  LucSelectTransRLE0Func selectTransRLE0;
-  LucSelectTransRLE0HFunc selectTransRLE0H;
-  LucSelectTransRLE0VFunc selectTransRLE0V;
-  LucSelectTransRLE0HVFunc selectTransRLE0HV;
-  LucSelectTransRLE0RSFunc selectTransRLE0RS;
-
-  LucSelectBlendRLE0Func selectBlendRLE0;
-  LucSelectBlendRLE0HFunc selectBlendRLE0H;
-  LucSelectBlendRLE0VFunc selectBlendRLE0V;
-  LucSelectBlendRLE0HVFunc selectBlendRLE0HV;
-  LucSelectBlendRLE0RSFunc selectBlendRLE0RS;
-
-  LucSelectDrawMaskFunc selectDrawMask;
-  LucSelectDrawMaskHFunc selectDrawMaskH;
-  LucSelectDrawMaskVFunc selectDrawMaskV;
-  LucSelectDrawMaskHVFunc selectDrawMaskHV;
-  LucSelectDrawMaskRSFunc selectDrawMaskRS;
-
-  LucSelectTransMaskFunc selectTransMask;
-  LucSelectTransMaskHFunc selectTransMaskH;
-  LucSelectTransMaskVFunc selectTransMaskV;
-  LucSelectTransMaskHVFunc selectTransMaskHV;
-  LucSelectTransMaskRSFunc selectTransMaskRS;
-
-  LucSelectBlendMaskFunc selectBlendMask;
-  LucSelectBlendMaskHFunc selectBlendMaskH;
-  LucSelectBlendMaskVFunc selectBlendMaskV;
-  LucSelectBlendMaskHVFunc selectBlendMaskHV;
-  LucSelectBlendMaskRSFunc selectBlendMaskRS;
-
   // Image interface
   LucReleaseImageFunc releaseImage;
 
@@ -334,57 +254,30 @@ typedef struct LucCanvas {
 
   // Canvas blitters
   LucDrawImageFunc drawImage;
-  LucDrawImageHFunc drawImageH;
-  LucDrawImageVFunc drawImageV;
-  LucDrawImageHVFunc drawImageHV;
   LucDrawImageRSFunc drawImageRS;
 
   LucTransImageFunc transImage;
-  LucTransImageHFunc transImageH;
-  LucTransImageVFunc transImageV;
-  LucTransImageHVFunc transImageHV;
   LucTransImageRSFunc transImageRS;
 
   LucBlendImageFunc blendImage;
-  LucBlendImageHFunc blendImageH;
-  LucBlendImageVFunc blendImageV;
-  LucBlendImageHVFunc blendImageHV;
   LucBlendImageRSFunc blendImageRS;
 
   LucDrawRLE0Func drawRLE0;
-  LucDrawRLE0HFunc drawRLE0H;
-  LucDrawRLE0VFunc drawRLE0V;
-  LucDrawRLE0HVFunc drawRLE0HV;
   LucDrawRLE0RSFunc drawRLE0RS;
 
   LucTransRLE0Func transRLE0;
-  LucTransRLE0HFunc transRLE0H;
-  LucTransRLE0VFunc transRLE0V;
-  LucTransRLE0HVFunc transRLE0HV;
   LucTransRLE0RSFunc transRLE0RS;
 
   LucBlendRLE0Func blendRLE0;
-  LucBlendRLE0HFunc blendRLE0H;
-  LucBlendRLE0VFunc blendRLE0V;
-  LucBlendRLE0HVFunc blendRLE0HV;
   LucBlendRLE0RSFunc blendRLE0RS;
 
   LucDrawMaskFunc drawMask;
-  LucDrawMaskHFunc drawMaskH;
-  LucDrawMaskVFunc drawMaskV;
-  LucDrawMaskHVFunc drawMaskHV;
   LucDrawMaskRSFunc drawMaskRS;
 
   LucTransMaskFunc transMask;
-  LucTransMaskHFunc transMaskH;
-  LucTransMaskVFunc transMaskV;
-  LucTransMaskHVFunc transMaskHV;
   LucTransMaskRSFunc transMaskRS;
 
   LucBlendMaskFunc blendMask;
-  LucBlendMaskHFunc blendMaskH;
-  LucBlendMaskVFunc blendMaskV;
-  LucBlendMaskHVFunc blendMaskHV;
   LucBlendMaskRSFunc blendMaskRS;
 } LucCanvas;
 
@@ -451,28 +344,10 @@ unsigned lucBlendfillPoly( LucCanvas* canvas, int x, int y,
 unsigned lucDrawImage( LucCanvas* canvas, int x, int y,
   LucImage* image, LucRect* imageRect );
 
-unsigned lucDrawImageH( LucCanvas* canvas, int x, int y,
-  LucImage* image, LucRect* imageRect );
-
-unsigned lucDrawImageV( LucCanvas* canvas, int x, int y,
-  LucImage* image, LucRect* imageRect );
-
-unsigned lucDrawImageHV( LucCanvas* canvas, int x, int y,
-  LucImage* image, LucRect* imageRect );
-
 unsigned lucDrawImageRS( LucCanvas* canvas, int x, int y,
   LucImage* image, LucRect* imageRect, int rotateBy, int scaleBy );
 
 unsigned lucTransImage( LucCanvas* canvas, int x, int y,
-  LucImage* image, LucRect* imageRect );
-
-unsigned lucTransImageH( LucCanvas* canvas, int x, int y,
-  LucImage* image, LucRect* imageRect );
-
-unsigned lucTransImageV( LucCanvas* canvas, int x, int y,
-  LucImage* image, LucRect* imageRect );
-
-unsigned lucTransImageHV( LucCanvas* canvas, int x, int y,
   LucImage* image, LucRect* imageRect );
 
 unsigned lucTransImageRS( LucCanvas* canvas, int x, int y,
@@ -481,28 +356,10 @@ unsigned lucTransImageRS( LucCanvas* canvas, int x, int y,
 unsigned lucBlendImage( LucCanvas* canvas, int x, int y,
   LucImage* image, LucRect* imageRect );
 
-unsigned lucBlendImageH( LucCanvas* canvas, int x, int y,
-  LucImage* image, LucRect* imageRect );
-
-unsigned lucBlendImageV( LucCanvas* canvas, int x, int y,
-  LucImage* image, LucRect* imageRect );
-
-unsigned lucBlendImageHV( LucCanvas* canvas, int x, int y,
-  LucImage* image, LucRect* imageRect );
-
 unsigned lucBlendImageRS( LucCanvas* canvas, int x, int y,
   LucImage* image, LucRect* imageRect, int rotateBy, int scaleBy );
 
 unsigned lucDrawRLE0( LucCanvas* canvas, int x, int y,
-  LucImage* image, LucRect* imageRect );
-
-unsigned lucDrawRLE0H( LucCanvas* canvas, int x, int y,
-  LucImage* image, LucRect* imageRect );
-
-unsigned lucDrawRLE0V( LucCanvas* canvas, int x, int y,
-  LucImage* image, LucRect* imageRect );
-
-unsigned lucDrawRLE0HV( LucCanvas* canvas, int x, int y,
   LucImage* image, LucRect* imageRect );
 
 unsigned lucDrawRLE0RS( LucCanvas* canvas, int x, int y,
@@ -511,28 +368,10 @@ unsigned lucDrawRLE0RS( LucCanvas* canvas, int x, int y,
 unsigned lucTransRLE0( LucCanvas* canvas, int x, int y,
   LucImage* image, LucRect* imageRect );
 
-unsigned lucTransRLE0H( LucCanvas* canvas, int x, int y,
-  LucImage* image, LucRect* imageRect );
-
-unsigned lucTransRLE0V( LucCanvas* canvas, int x, int y,
-  LucImage* image, LucRect* imageRect );
-
-unsigned lucTransRLE0HV( LucCanvas* canvas, int x, int y,
-  LucImage* image, LucRect* imageRect );
-
 unsigned lucTransRLE0RS( LucCanvas* canvas, int x, int y,
   LucImage* image, LucRect* imageRect, int rotateBy, int scaleBy );
 
 unsigned lucBlendRLE0( LucCanvas* canvas, int x, int y,
-  LucImage* image, LucRect* imageRect );
-
-unsigned lucBlendRLE0H( LucCanvas* canvas, int x, int y,
-  LucImage* image, LucRect* imageRect );
-
-unsigned lucBlendRLE0V( LucCanvas* canvas, int x, int y,
-  LucImage* image, LucRect* imageRect );
-
-unsigned lucBlendRLE0HV( LucCanvas* canvas, int x, int y,
   LucImage* image, LucRect* imageRect );
 
 unsigned lucBlendRLE0RS( LucCanvas* canvas, int x, int y,
@@ -541,43 +380,16 @@ unsigned lucBlendRLE0RS( LucCanvas* canvas, int x, int y,
 unsigned lucDrawMask( LucCanvas* canvas, int x, int y,
   LucImage* image, LucRect* imageRect );
 
-unsigned lucDrawMaskH( LucCanvas* canvas, int x, int y,
-  LucImage* image, LucRect* imageRect );
-
-unsigned lucDrawMaskV( LucCanvas* canvas, int x, int y,
-  LucImage* image, LucRect* imageRect );
-
-unsigned lucDrawMaskHV( LucCanvas* canvas, int x, int y,
-  LucImage* image, LucRect* imageRect );
-
 unsigned lucDrawMaskRS( LucCanvas* canvas, int x, int y,
   LucImage* image, LucRect* imageRect, int rotateBy, int scaleBy );
 
 unsigned lucTransMask( LucCanvas* canvas, int x, int y,
   LucImage* image, LucRect* imageRect );
 
-unsigned lucTransMaskH( LucCanvas* canvas, int x, int y,
-  LucImage* image, LucRect* imageRect );
-
-unsigned lucTransMaskV( LucCanvas* canvas, int x, int y,
-  LucImage* image, LucRect* imageRect );
-
-unsigned lucTransMaskHV( LucCanvas* canvas, int x, int y,
-  LucImage* image, LucRect* imageRect );
-
 unsigned lucTransMaskRS( LucCanvas* canvas, int x, int y,
   LucImage* image, LucRect* imageRect, int rotateBy, int scaleBy );
 
 unsigned lucBlendMask( LucCanvas* canvas, int x, int y,
-  LucImage* image, LucRect* imageRect );
-
-unsigned lucBlendMaskH( LucCanvas* canvas, int x, int y,
-  LucImage* image, LucRect* imageRect );
-
-unsigned lucBlendMaskV( LucCanvas* canvas, int x, int y,
-  LucImage* image, LucRect* imageRect );
-
-unsigned lucBlendMaskHV( LucCanvas* canvas, int x, int y,
   LucImage* image, LucRect* imageRect );
 
 unsigned lucBlendMaskRS( LucCanvas* canvas, int x, int y,
@@ -673,28 +485,10 @@ unsigned gdiBlendfillPoly( LucCanvas* canvas, int x, int y,
 unsigned gdiDrawImage( LucCanvas* canvas, int x, int y,
   LucImage* image, LucRect* imageRect );
 
-unsigned gdiDrawImageH( LucCanvas* canvas, int x, int y,
-  LucImage* image, LucRect* imageRect );
-
-unsigned gdiDrawImageV( LucCanvas* canvas, int x, int y,
-  LucImage* image, LucRect* imageRect );
-
-unsigned gdiDrawImageHV( LucCanvas* canvas, int x, int y,
-  LucImage* image, LucRect* imageRect );
-
 unsigned gdiDrawImageRS( LucCanvas* canvas, int x, int y,
   LucImage* image, LucRect* imageRect, int rotateBy, int scaleBy );
 
 unsigned gdiTransImage( LucCanvas* canvas, int x, int y,
-  LucImage* image, LucRect* imageRect );
-
-unsigned gdiTransImageH( LucCanvas* canvas, int x, int y,
-  LucImage* image, LucRect* imageRect );
-
-unsigned gdiTransImageV( LucCanvas* canvas, int x, int y,
-  LucImage* image, LucRect* imageRect );
-
-unsigned gdiTransImageHV( LucCanvas* canvas, int x, int y,
   LucImage* image, LucRect* imageRect );
 
 unsigned gdiTransImageRS( LucCanvas* canvas, int x, int y,
@@ -703,28 +497,10 @@ unsigned gdiTransImageRS( LucCanvas* canvas, int x, int y,
 unsigned gdiBlendImage( LucCanvas* canvas, int x, int y,
   LucImage* image, LucRect* imageRect );
 
-unsigned gdiBlendImageH( LucCanvas* canvas, int x, int y,
-  LucImage* image, LucRect* imageRect );
-
-unsigned gdiBlendImageV( LucCanvas* canvas, int x, int y,
-  LucImage* image, LucRect* imageRect );
-
-unsigned gdiBlendImageHV( LucCanvas* canvas, int x, int y,
-  LucImage* image, LucRect* imageRect );
-
 unsigned gdiBlendImageRS( LucCanvas* canvas, int x, int y,
   LucImage* image, LucRect* imageRect, int rotateBy, int scaleBy );
 
 unsigned gdiDrawRLE0( LucCanvas* canvas, int x, int y,
-  LucImage* image, LucRect* imageRect );
-
-unsigned gdiDrawRLE0H( LucCanvas* canvas, int x, int y,
-  LucImage* image, LucRect* imageRect );
-
-unsigned gdiDrawRLE0V( LucCanvas* canvas, int x, int y,
-  LucImage* image, LucRect* imageRect );
-
-unsigned gdiDrawRLE0HV( LucCanvas* canvas, int x, int y,
   LucImage* image, LucRect* imageRect );
 
 unsigned gdiDrawRLE0RS( LucCanvas* canvas, int x, int y,
@@ -733,28 +509,10 @@ unsigned gdiDrawRLE0RS( LucCanvas* canvas, int x, int y,
 unsigned gdiTransRLE0( LucCanvas* canvas, int x, int y,
   LucImage* image, LucRect* imageRect );
 
-unsigned gdiTransRLE0H( LucCanvas* canvas, int x, int y,
-  LucImage* image, LucRect* imageRect );
-
-unsigned gdiTransRLE0V( LucCanvas* canvas, int x, int y,
-  LucImage* image, LucRect* imageRect );
-
-unsigned gdiTransRLE0HV( LucCanvas* canvas, int x, int y,
-  LucImage* image, LucRect* imageRect );
-
 unsigned gdiTransRLE0RS( LucCanvas* canvas, int x, int y,
   LucImage* image, LucRect* imageRect, int rotateBy, int scaleBy );
 
 unsigned gdiBlendRLE0( LucCanvas* canvas, int x, int y,
-  LucImage* image, LucRect* imageRect );
-
-unsigned gdiBlendRLE0H( LucCanvas* canvas, int x, int y,
-  LucImage* image, LucRect* imageRect );
-
-unsigned gdiBlendRLE0V( LucCanvas* canvas, int x, int y,
-  LucImage* image, LucRect* imageRect );
-
-unsigned gdiBlendRLE0HV( LucCanvas* canvas, int x, int y,
   LucImage* image, LucRect* imageRect );
 
 unsigned gdiBlendRLE0RS( LucCanvas* canvas, int x, int y,
@@ -763,43 +521,16 @@ unsigned gdiBlendRLE0RS( LucCanvas* canvas, int x, int y,
 unsigned gdiDrawMask( LucCanvas* canvas, int x, int y,
   LucImage* image, LucRect* imageRect );
 
-unsigned gdiDrawMaskH( LucCanvas* canvas, int x, int y,
-  LucImage* image, LucRect* imageRect );
-
-unsigned gdiDrawMaskV( LucCanvas* canvas, int x, int y,
-  LucImage* image, LucRect* imageRect );
-
-unsigned gdiDrawMaskHV( LucCanvas* canvas, int x, int y,
-  LucImage* image, LucRect* imageRect );
-
 unsigned gdiDrawMaskRS( LucCanvas* canvas, int x, int y,
   LucImage* image, LucRect* imageRect, int rotateBy, int scaleBy );
 
 unsigned gdiTransMask( LucCanvas* canvas, int x, int y,
   LucImage* image, LucRect* imageRect );
 
-unsigned gdiTransMaskH( LucCanvas* canvas, int x, int y,
-  LucImage* image, LucRect* imageRect );
-
-unsigned gdiTransMaskV( LucCanvas* canvas, int x, int y,
-  LucImage* image, LucRect* imageRect );
-
-unsigned gdiTransMaskHV( LucCanvas* canvas, int x, int y,
-  LucImage* image, LucRect* imageRect );
-
 unsigned gdiTransMaskRS( LucCanvas* canvas, int x, int y,
   LucImage* image, LucRect* imageRect, int rotateBy, int scaleBy );
 
 unsigned gdiBlendMask( LucCanvas* canvas, int x, int y,
-  LucImage* image, LucRect* imageRect );
-
-unsigned gdiBlendMaskH( LucCanvas* canvas, int x, int y,
-  LucImage* image, LucRect* imageRect );
-
-unsigned gdiBlendMaskV( LucCanvas* canvas, int x, int y,
-  LucImage* image, LucRect* imageRect );
-
-unsigned gdiBlendMaskHV( LucCanvas* canvas, int x, int y,
   LucImage* image, LucRect* imageRect );
 
 unsigned gdiBlendMaskRS( LucCanvas* canvas, int x, int y,
