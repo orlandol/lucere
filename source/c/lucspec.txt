@@ -91,6 +91,30 @@ unsigned lucRouteEvents( LucApp* app );
 
 unsigned lucWaitForNextEvent( LucApp* app );
 
+===============================
+= Win32 Application Interface =
+===============================
+
+#include "lucimpl.h"
+
+typedef struct LucApp {
+  size_t structSize; // == sizeof(LucApp) [mem] or 0 [var]
+
+  HWND window;
+  HINSTANCE instance;
+} LucApp;
+
+LucApp* lucCreateApp( const char* title, unsigned width, unsigned height,
+    unsigned flags, LucEventRouter eventRouter );
+
+unsigned lucReleaseApp( LucApp** appPointer );
+
+unsigned lucExitApp( unsigned returnCode );
+
+unsigned lucRouteEvents( LucApp* app );
+
+unsigned lucWaitForNextEvent( LucApp* app );
+
 ======================
 = Graphics Hierarchy =
 ======================
@@ -118,12 +142,11 @@ LucApp = [System]App
 #include "lucimpl.h"
 
 typedef struct LucGraphicsSystem {
-  // Display creators and helpers
-  LucDisplayCountFunc displayCount;
   LucCreateDisplayFunc createDisplay;
 
   // Display interface
   LucReleaseDisplayFunc releaseDisplay;
+
   LucCenterCanvasFunc centerCanvas;
   LucFitCanvasHFunc fitCanvasH;
   LucFitCanvasVFunc fitCanvasV;
@@ -133,8 +156,6 @@ typedef struct LucGraphicsSystem {
 
   // Canvas interface
   LucReleaseCanvasFunc releaseCanvas;
-
-  LucSelectClearFunc selectClear;
 
   LucCanvasSurfaceType canvasSurfaceType;
   LucAccessCanvasSurfaceFunc accessCanvasSurface;
