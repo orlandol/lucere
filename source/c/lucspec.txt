@@ -1,7 +1,6 @@
-
 ========================================
 = Lucere Design Spec by Orlando Llanes =
-= Updated 9/23/23                      =
+=                      Updated 9/24/23 =
 ========================================
 
 Purpose: Provide a stable foundation for games and multimedia software.
@@ -22,7 +21,7 @@ Design goals:
 - Invert dependencies for dead code elimination.
 - Minimize dependencies between unrelated subsystems for modularity.
 - Graphics modes where 2D and 3D can coexist.
-- Structure source to "just work".
+- Structure build project to "just work".
 - Design for forward and backward compatibility.
 
 ============================
@@ -135,101 +134,100 @@ typedef struct LucGraphicsSystem {
   // Canvas interface
   LucReleaseCanvasFunc releaseCanvas;
 
+  LucSelectClearFunc selectClear;
+
+  LucCanvasSurfaceType canvasSurfaceType;
+  LucAccessCanvasSurfaceFunc accessCanvasSurface;
+  LucReleaseCanvasSurfaceFunc releaseCanvasSurface;
+
   // Canvas primitive function selectors
-  LucRetrievePixelAtFunc retrievePixelAt;
-  LucRetrieveDrawPixelFunc retrieveDrawPixel;
-  LucRetrieveBlendPixelFunc retrieveBlendPixel;
+  LucSelectPixelAtFunc selectPixelAt;
+  LucSelectDrawPixelFunc selectDrawPixel;
+  LucSelectBlendPixelFunc selectBlendPixel;
 
-  LucRetrieveDrawCircleFunc retrieveDrawCircle;
-  LucRetrieveFillCircleFunc retrieveFillCircle;
-  LucRetrieveBlendCircleFunc retrieveBlendCircle;
+  LucSelectDrawCircleFunc selectDrawCircle;
+  LucSelectFillCircleFunc selectFillCircle;
+  LucSelectBlendCircleFunc selectBlendCircle;
+  LucSelectBlendfillCircleFunc selectBlendfillCircle;
 
-  LucRetrieveDrawEllipseFunc retrieveDrawEllipse;
-  LucRetrieveFillEllipseFunc retrieveFillEllipse;
-  LucRetrieveBlendEllipseFunc retrieveBlendEllipse;
+  LucSelectDrawEllipseFunc selectDrawEllipse;
+  LucSelectFillEllipseFunc selectFillEllipse;
+  LucSelectBlendEllipseFunc selectBlendEllipse;
+  LucSelectBlendfillEllipseFunc selectBlendfillEllipse;
 
-  LucRetrieveDrawRectFunc retrieveDrawRect;
-  LucRetrieveFillRectFunc retrieveFillRect;
-  LucRetrieveBlendRectFunc retrieveBlendRect;
+  LucSelectDrawRectFunc selectDrawRect;
+  LucSelectFillRectFunc selectFillRect;
+  LucSelectBlendRectFunc selectBlendRect;
+  LucSelectBlendfillRectFunc selectBlendfillRect;
 
-  // Canvas primitives
-  LucPixelAtFunc pixelAt;
-  LucDrawPixelFunc drawPixel;
-  LucBlendPixelFunc blendPixel;
-
-  LucDrawCircleFunc drawCircle;
-  LucFillCircleFunc fillCircle;
-  LucBlendCircleFunc blendCircle;
-
-  LucDrawEllipseFunc drawEllipse;
-  LucFillEllipseFunc fillEllipse;
-  LucBlendEllipseFunc blendEllipse;
-
-  LucDrawRectFunc drawRect;
-  LucFillRectFunc fillRect;
-  LucBlendRectFunc blendRect;
+  LucSelectDrawPolyFunc selectDrawPoly;
+  LucSelectFillPolyFunc selectFillPoly;
+  LucSelectBlendPolyFunc selectBlendPoly;
+  LucSelectBlendfillPolyFunc selectBlendfillPoly;
 
   // Canvas blitter function selectors
-  LucRetrieveDrawImageFunc retrieveDrawImage;
-  LucRetrieveDrawImageHFunc retrieveDrawImageH;
-  LucRetrieveDrawImageVFunc retrieveDrawImageV;
-  LucRetrieveDrawImageHVFunc retrieveDrawImageHV;
-  LucRetrieveDrawImageRSFunc retrieveDrawImageRS;
+  LucSelectDrawImageFunc selectDrawImage;
+  LucSelectDrawImageHFunc selectDrawImageH;
+  LucSelectDrawImageVFunc selectDrawImageV;
+  LucSelectDrawImageHVFunc selectDrawImageHV;
+  LucSelectDrawImageRSFunc selectDrawImageRS;
 
-  LucRetrieveTransImageFunc retrieveTransImage;
-  LucRetrieveTransImageHFunc retrieveTransImageH;
-  LucRetrieveTransImageVFunc retrieveTransImageV;
-  LucRetrieveTransImageHVFunc retrieveTransImageHV;
-  LucRetrieveTransImageRSFunc retrieveTransImageRS;
+  LucSelectTransImageFunc selectTransImage;
+  LucSelectTransImageHFunc selectTransImageH;
+  LucSelectTransImageVFunc selectTransImageV;
+  LucSelectTransImageHVFunc selectTransImageHV;
+  LucSelectTransImageRSFunc selectTransImageRS;
 
-  LucRetrieveBlendImageFunc retrieveBlendImage;
-  LucRetrieveBlendImageHFunc retrieveBlendImageH;
-  LucRetrieveBlendImageVFunc retrieveBlendImageV;
-  LucRetrieveBlendImageHVFunc retrieveBlendImageHV;
-  LucRetrieveBlendImageRSFunc retrieveBlendImageRS;
+  LucSelectBlendImageFunc selectBlendImage;
+  LucSelectBlendImageHFunc selectBlendImageH;
+  LucSelectBlendImageVFunc selectBlendImageV;
+  LucSelectBlendImageHVFunc selectBlendImageHV;
+  LucSelectBlendImageRSFunc selectBlendImageRS;
 
-  LucRetrieveDrawRLE0Func retrieveDrawRLE0;
-  LucRetrieveDrawRLE0HFunc retrieveDrawRLE0H;
-  LucRetrieveDrawRLE0VFunc retrieveDrawRLE0V;
-  LucRetrieveDrawRLE0HVFunc retrieveDrawRLE0HV;
-  LucRetrieveDrawRLE0RSFunc retrieveDrawRLE0RS;
+  LucSelectDrawRLE0Func selectDrawRLE0;
+  LucSelectDrawRLE0HFunc selectDrawRLE0H;
+  LucSelectDrawRLE0VFunc selectDrawRLE0V;
+  LucSelectDrawRLE0HVFunc selectDrawRLE0HV;
+  LucSelectDrawRLE0RSFunc selectDrawRLE0RS;
 
-  LucRetrieveTransRLE0Func retrieveTransRLE0;
-  LucRetrieveTransRLE0HFunc retrieveTransRLE0H;
-  LucRetrieveTransRLE0VFunc retrieveTransRLE0V;
-  LucRetrieveTransRLE0HVFunc retrieveTransRLE0HV;
-  LucRetrieveTransRLE0RSFunc retrieveTransRLE0RS;
+  LucSelectTransRLE0Func selectTransRLE0;
+  LucSelectTransRLE0HFunc selectTransRLE0H;
+  LucSelectTransRLE0VFunc selectTransRLE0V;
+  LucSelectTransRLE0HVFunc selectTransRLE0HV;
+  LucSelectTransRLE0RSFunc selectTransRLE0RS;
 
-  LucRetrieveBlendRLE0Func retrieveBlendRLE0;
-  LucRetrieveBlendRLE0HFunc retrieveBlendRLE0H;
-  LucRetrieveBlendRLE0VFunc retrieveBlendRLE0V;
-  LucRetrieveBlendRLE0HVFunc retrieveBlendRLE0HV;
-  LucRetrieveBlendRLE0RSFunc retrieveBlendRLE0RS;
+  LucSelectBlendRLE0Func selectBlendRLE0;
+  LucSelectBlendRLE0HFunc selectBlendRLE0H;
+  LucSelectBlendRLE0VFunc selectBlendRLE0V;
+  LucSelectBlendRLE0HVFunc selectBlendRLE0HV;
+  LucSelectBlendRLE0RSFunc selectBlendRLE0RS;
 
-  LucRetrieveDrawMaskFunc retrieveDrawMask;
-  LucRetrieveDrawMaskHFunc retrieveDrawMaskH;
-  LucRetrieveDrawMaskVFunc retrieveDrawMaskV;
-  LucRetrieveDrawMaskHVFunc retrieveDrawMaskHV;
-  LucRetrieveDrawMaskRSFunc retrieveDrawMaskRS;
+  LucSelectDrawMaskFunc selectDrawMask;
+  LucSelectDrawMaskHFunc selectDrawMaskH;
+  LucSelectDrawMaskVFunc selectDrawMaskV;
+  LucSelectDrawMaskHVFunc selectDrawMaskHV;
+  LucSelectDrawMaskRSFunc selectDrawMaskRS;
 
-  LucRetrieveTransMaskFunc retrieveTransMask;
-  LucRetrieveTransMaskHFunc retrieveTransMaskH;
-  LucRetrieveTransMaskVFunc retrieveTransMaskV;
-  LucRetrieveTransMaskHVFunc retrieveTransMaskHV;
-  LucRetrieveTransMaskRSFunc retrieveTransMaskRS;
+  LucSelectTransMaskFunc selectTransMask;
+  LucSelectTransMaskHFunc selectTransMaskH;
+  LucSelectTransMaskVFunc selectTransMaskV;
+  LucSelectTransMaskHVFunc selectTransMaskHV;
+  LucSelectTransMaskRSFunc selectTransMaskRS;
 
-  LucRetrieveBlendMaskFunc retrieveBlendMask;
-  LucRetrieveBlendMaskHFunc retrieveBlendMaskH;
-  LucRetrieveBlendMaskVFunc retrieveBlendMaskV;
-  LucRetrieveBlendMaskHVFunc retrieveBlendMaskHV;
-  LucRetrieveBlendMaskRSFunc retrieveBlendMaskRS;
+  LucSelectBlendMaskFunc selectBlendMask;
+  LucSelectBlendMaskHFunc selectBlendMaskH;
+  LucSelectBlendMaskVFunc selectBlendMaskV;
+  LucSelectBlendMaskHVFunc selectBlendMaskHV;
+  LucSelectBlendMaskRSFunc selectBlendMaskRS;
 
-  // Canvas blitters
+  // Image interface
+  LucReleaseImageFunc releaseImage;
+
+  LucImageSurfaceTypeFunc imageSurfaceType;
+  LucImageAccessSurfaceFunc accessImageSurface;
+  LucImageReleaseSurfaceFunc releaseImageSurface;
 
   // Surface interface
-  LucCanvasSurfaceTypeFunc canvasSurfaceType;
-  LucBeginSurfaceFunc beginSurface;
-  LucEndSurfaceFunc endSurface;
 } LucGraphicsSystem;
 
 =====================
@@ -239,8 +237,7 @@ typedef struct LucGraphicsSystem {
 #include "lucere.h"
 
 typedef struct LucDisplay {
-  // Base header
-  size_t structSize;
+  size_t structSize; // = sizeof(LucDisplay) [mem] or 0 [var]
 
   LucReleaseDisplayFunc releaseDisplay;
   LucCenterCanvasFunc centerCanvas;
@@ -251,8 +248,8 @@ typedef struct LucDisplay {
 
 unsigned lucDisplayCount( LucApp* app );
 
-LucDisplay* lucCreateDisplay( LucApp* app,
-  unsigned monitorIndex, LucGraphicsSystem* graphics );
+LucDisplay* lucCreateDisplay( LucApp* app, unsigned monitorIndex,
+  LucGraphicsSystem* graphics );
 
 unsigned lucReleaseDisplay( LucDisplay** displayPtr );
 
@@ -264,25 +261,23 @@ unsigned lucFitCanvasV( LucDisplay* display, LucCanvas* canvas );
 
 unsigned lucStretchCanvas( LucDisplay* display, LucCanvas* canvas );
 
+unsigned lucSetDrawCanvasMode( LucDisplay* display, unsigned drawCanvasMode );
+
+unsigned lucDrawCanvas( LucDisplay* display, LucCanvas* canvas );
+
 ===============================
 = Win32 GDI Display Interface =
 ===============================
 
 #include "lucimpl.h"
 
-const LucDisplay Win32Display = {
-  // Base header
-  sizeof(HBITMAP),
+typedef struct Win32GdiDisplay {
+  size_t structSize; // = sizeof(Win32GdiDisplay) [mem] or 0 [var]
 
-  gdiReleaseDisplay,
-  gdiCenterCanvas,
-  gdiFitCanvasH,
-  gdiFitCanvasV,
-  gdiStretchCanvas
+  ...
 
-  // Win32 extensions
-  HBITMAP dibSection,
-};
+  HBITMAP dibSection;
+} Win32GdiDisplay;
 
 unsigned gdiDisplayCount( LucApp* app );
 
@@ -300,6 +295,515 @@ unsigned gdiFitCanvasH( LucDisplay* display, LucCanvas* canvas );
 unsigned gdiFitCanvasV( LucDisplay* display, LucCanvas* canvas );
 
 unsigned gdiStretchCanvas( LucDisplay* display, LucCanvas* canvas );
+
+====================
+= Canvas Interface =
+====================
+
+#include "lucimpl.h"
+
+typedef struct LucCanvas {
+  size_t structSize; // = sizeof(LucCanvas) [mem] or 0 [var]
+
+  LucClearFunc clear;
+
+  // Canvas primitives
+  LucPixelAtFunc pixelAt;
+  LucDrawPixelFunc drawPixel;
+  LucBlendPixelFunc blendPixel;
+
+  LucDrawCircleFunc drawCircle;
+  LucBlendCircleFunc blendCircle;
+  LucFillCircleFunc fillCircle;
+  LucBlendfillCircleFunc blendfillCircle;
+
+  LucDrawEllipseFunc drawEllipse;
+  LucFillEllipseFunc fillEllipse;
+  LucBlendEllipseFunc blendEllipse;
+  LucBlendfillEllipseFunc blendfillEllipse;
+
+  LucDrawRectFunc drawRect;
+  LucFillRectFunc fillRect;
+  LucBlendRectFunc blendRect;
+  LucBlendfillRectFunc blendfillRect;
+
+  LucDrawPolyFunc drawPoly;
+  LucFillPolyFunc fillPoly;
+  LucBlendPolyFunc blendPoly;
+  LucBlendfillPolyFunc blendfillPoly;
+
+  // Canvas blitters
+  LucDrawImageFunc drawImage;
+  LucDrawImageHFunc drawImageH;
+  LucDrawImageVFunc drawImageV;
+  LucDrawImageHVFunc drawImageHV;
+  LucDrawImageRSFunc drawImageRS;
+
+  LucTransImageFunc transImage;
+  LucTransImageHFunc transImageH;
+  LucTransImageVFunc transImageV;
+  LucTransImageHVFunc transImageHV;
+  LucTransImageRSFunc transImageRS;
+
+  LucBlendImageFunc blendImage;
+  LucBlendImageHFunc blendImageH;
+  LucBlendImageVFunc blendImageV;
+  LucBlendImageHVFunc blendImageHV;
+  LucBlendImageRSFunc blendImageRS;
+
+  LucDrawRLE0Func drawRLE0;
+  LucDrawRLE0HFunc drawRLE0H;
+  LucDrawRLE0VFunc drawRLE0V;
+  LucDrawRLE0HVFunc drawRLE0HV;
+  LucDrawRLE0RSFunc drawRLE0RS;
+
+  LucTransRLE0Func transRLE0;
+  LucTransRLE0HFunc transRLE0H;
+  LucTransRLE0VFunc transRLE0V;
+  LucTransRLE0HVFunc transRLE0HV;
+  LucTransRLE0RSFunc transRLE0RS;
+
+  LucBlendRLE0Func blendRLE0;
+  LucBlendRLE0HFunc blendRLE0H;
+  LucBlendRLE0VFunc blendRLE0V;
+  LucBlendRLE0HVFunc blendRLE0HV;
+  LucBlendRLE0RSFunc blendRLE0RS;
+
+  LucDrawMaskFunc drawMask;
+  LucDrawMaskHFunc drawMaskH;
+  LucDrawMaskVFunc drawMaskV;
+  LucDrawMaskHVFunc drawMaskHV;
+  LucDrawMaskRSFunc drawMaskRS;
+
+  LucTransMaskFunc transMask;
+  LucTransMaskHFunc transMaskH;
+  LucTransMaskVFunc transMaskV;
+  LucTransMaskHVFunc transMaskHV;
+  LucTransMaskRSFunc transMaskRS;
+
+  LucBlendMaskFunc blendMask;
+  LucBlendMaskHFunc blendMaskH;
+  LucBlendMaskVFunc blendMaskV;
+  LucBlendMaskHVFunc blendMaskHV;
+  LucBlendMaskRSFunc blendMaskRS;
+} LucCanvas;
+
+unsigned lucClearCanvas( LucCanvas* canvas, unsigned color );
+
+// Canvas primitives
+unsigned lucPixelAt( LucCanvas* canvas, int x, int y );
+
+unsigned lucDrawPixel( LucCanvas* canvas, int x, int y,
+  unsigned color );
+
+unsigned lucBlendPixel( LucCanvas* canvas, int x, int y,
+  unsigned color );
+
+unsigned lucDrawCircle( LucCanvas* canvas, int x, int y,
+  unsigned radius, unsigned color );
+
+unsigned lucFillCircle( LucCanvas* canvas, int x, int y,
+  unsigned radius, unsigned color );
+
+unsigned lucBlendCircle( LucCanvas* canvas, int x, int y,
+  unsigned radius, unsigned color );
+
+unsigned lucBlendfillCircle( LucCanvas* canvas, int x, int y,
+  unsigned radius, unsigned color );
+
+unsigned lucDrawEllipse( LucCanvas* canvas, int x, int y,
+  unsigned hradius, unsigned vradius, unsigned color );
+
+unsigned lucFillEllipse( LucCanvas* canvas, int x, int y,
+  unsigned hradius, unsigned vradius, unsigned color );
+
+unsigned lucBlendEllipse( LucCanvas* canvas, int x, int y,
+  unsigned hradius, int vradius, unsigned color );
+
+unsigned lucBlendfillEllipse( LucCanvas* canvas, int x, int y,
+  unsigned hradius, int vradius, unsigned color );
+
+unsigned lucDrawRect( LucCanvas* canvas, int x, int y,
+  unsigned width, unsigned height, unsigned color );
+
+unsigned lucFillRect( LucCanvas* canvas, int x, int y,
+  unsigned width, unsigned height, unsigned color );
+
+unsigned lucBlendRect( LucCanvas* canvas, int x, int y,
+  unsigned width, unsigned height, unsigned color );
+
+unsigned lucBlendfillRect( LucCanvas* canvas, int x, int y,
+  unsigned width, unsigned height, unsigned color );
+
+unsigned lucDrawPoly( LucCanvas* canvas, int x, int y,
+  LucPoly* polygon, unsigned color );
+
+unsigned lucFillPoly( LucCanvas* canvas, int x, int y,
+  LucPoly* polygon, unsigned color );
+
+unsigned lucBlendPoly( LucCanvas* canvas, int x, int y,
+  LucPoly* polygon, unsigned color );
+
+unsigned lucBlendfillPoly( LucCanvas* canvas, int x, int y,
+  LucPoly* polygon, unsigned color );
+
+// Canvas blitters
+unsigned lucDrawImage( LucCanvas* canvas, int x, int y,
+  LucImage* image, LucRect* imageRect );
+
+unsigned lucDrawImageH( LucCanvas* canvas, int x, int y,
+  LucImage* image, LucRect* imageRect );
+
+unsigned lucDrawImageV( LucCanvas* canvas, int x, int y,
+  LucImage* image, LucRect* imageRect );
+
+unsigned lucDrawImageHV( LucCanvas* canvas, int x, int y,
+  LucImage* image, LucRect* imageRect );
+
+unsigned lucDrawImageRS( LucCanvas* canvas, int x, int y,
+  LucImage* image, LucRect* imageRect, int rotateBy, int scaleBy );
+
+unsigned lucTransImage( LucCanvas* canvas, int x, int y,
+  LucImage* image, LucRect* imageRect );
+
+unsigned lucTransImageH( LucCanvas* canvas, int x, int y,
+  LucImage* image, LucRect* imageRect );
+
+unsigned lucTransImageV( LucCanvas* canvas, int x, int y,
+  LucImage* image, LucRect* imageRect );
+
+unsigned lucTransImageHV( LucCanvas* canvas, int x, int y,
+  LucImage* image, LucRect* imageRect );
+
+unsigned lucTransImageRS( LucCanvas* canvas, int x, int y,
+  LucImage* image, LucRect* imageRect, int rotateBy, int scaleBy );
+
+unsigned lucBlendImage( LucCanvas* canvas, int x, int y,
+  LucImage* image, LucRect* imageRect );
+
+unsigned lucBlendImageH( LucCanvas* canvas, int x, int y,
+  LucImage* image, LucRect* imageRect );
+
+unsigned lucBlendImageV( LucCanvas* canvas, int x, int y,
+  LucImage* image, LucRect* imageRect );
+
+unsigned lucBlendImageHV( LucCanvas* canvas, int x, int y,
+  LucImage* image, LucRect* imageRect );
+
+unsigned lucBlendImageRS( LucCanvas* canvas, int x, int y,
+  LucImage* image, LucRect* imageRect, int rotateBy, int scaleBy );
+
+unsigned lucDrawRLE0( LucCanvas* canvas, int x, int y,
+  LucImage* image, LucRect* imageRect );
+
+unsigned lucDrawRLE0H( LucCanvas* canvas, int x, int y,
+  LucImage* image, LucRect* imageRect );
+
+unsigned lucDrawRLE0V( LucCanvas* canvas, int x, int y,
+  LucImage* image, LucRect* imageRect );
+
+unsigned lucDrawRLE0HV( LucCanvas* canvas, int x, int y,
+  LucImage* image, LucRect* imageRect );
+
+unsigned lucDrawRLE0RS( LucCanvas* canvas, int x, int y,
+  LucImage* image, LucRect* imageRect, int rotateBy, int scaleBy );
+
+unsigned lucTransRLE0( LucCanvas* canvas, int x, int y,
+  LucImage* image, LucRect* imageRect );
+
+unsigned lucTransRLE0H( LucCanvas* canvas, int x, int y,
+  LucImage* image, LucRect* imageRect );
+
+unsigned lucTransRLE0V( LucCanvas* canvas, int x, int y,
+  LucImage* image, LucRect* imageRect );
+
+unsigned lucTransRLE0HV( LucCanvas* canvas, int x, int y,
+  LucImage* image, LucRect* imageRect );
+
+unsigned lucTransRLE0RS( LucCanvas* canvas, int x, int y,
+  LucImage* image, LucRect* imageRect, int rotateBy, int scaleBy );
+
+unsigned lucBlendRLE0( LucCanvas* canvas, int x, int y,
+  LucImage* image, LucRect* imageRect );
+
+unsigned lucBlendRLE0H( LucCanvas* canvas, int x, int y,
+  LucImage* image, LucRect* imageRect );
+
+unsigned lucBlendRLE0V( LucCanvas* canvas, int x, int y,
+  LucImage* image, LucRect* imageRect );
+
+unsigned lucBlendRLE0HV( LucCanvas* canvas, int x, int y,
+  LucImage* image, LucRect* imageRect );
+
+unsigned lucBlendRLE0RS( LucCanvas* canvas, int x, int y,
+  LucImage* image, LucRect* imageRect, int rotateBy, int scaleBy );
+
+unsigned lucDrawMask( LucCanvas* canvas, int x, int y,
+  LucImage* image, LucRect* imageRect );
+
+unsigned lucDrawMaskH( LucCanvas* canvas, int x, int y,
+  LucImage* image, LucRect* imageRect );
+
+unsigned lucDrawMaskV( LucCanvas* canvas, int x, int y,
+  LucImage* image, LucRect* imageRect );
+
+unsigned lucDrawMaskHV( LucCanvas* canvas, int x, int y,
+  LucImage* image, LucRect* imageRect );
+
+unsigned lucDrawMaskRS( LucCanvas* canvas, int x, int y,
+  LucImage* image, LucRect* imageRect, int rotateBy, int scaleBy );
+
+unsigned lucTransMask( LucCanvas* canvas, int x, int y,
+  LucImage* image, LucRect* imageRect );
+
+unsigned lucTransMaskH( LucCanvas* canvas, int x, int y,
+  LucImage* image, LucRect* imageRect );
+
+unsigned lucTransMaskV( LucCanvas* canvas, int x, int y,
+  LucImage* image, LucRect* imageRect );
+
+unsigned lucTransMaskHV( LucCanvas* canvas, int x, int y,
+  LucImage* image, LucRect* imageRect );
+
+unsigned lucTransMaskRS( LucCanvas* canvas, int x, int y,
+  LucImage* image, LucRect* imageRect, int rotateBy, int scaleBy );
+
+unsigned lucBlendMask( LucCanvas* canvas, int x, int y,
+  LucImage* image, LucRect* imageRect );
+
+unsigned lucBlendMaskH( LucCanvas* canvas, int x, int y,
+  LucImage* image, LucRect* imageRect );
+
+unsigned lucBlendMaskV( LucCanvas* canvas, int x, int y,
+  LucImage* image, LucRect* imageRect );
+
+unsigned lucBlendMaskHV( LucCanvas* canvas, int x, int y,
+  LucImage* image, LucRect* imageRect );
+
+unsigned lucBlendMaskRS( LucCanvas* canvas, int x, int y,
+  LucImage* image, LucRect* imageRect, int rotateBy, int scaleBy );
+
+==============================
+= Win32 GDI Canvas Interface =
+==============================
+
+#include "lucimpl.h"
+
+typedef struct Win32GdiCanvas {
+  size_t structSize; // = sizeof(Win32GdiCanvas) [mem] or 0 [var]
+
+  ...
+
+  // Canvas primitives
+  ...
+
+  // Canvas blitters
+  ...
+
+  HBITMAP dibSection;
+} Win32GdiCanvas;
+
+unsigned gdiClearCanvas( LucCanvas* canvas, unsigned color );
+
+// Each function to follow will have 8/16/24/32-BPP variations, and nearly
+//   each BPP will have an MMX, and SSE optimized variation. Each BPP may
+//   also have AVX optimized variations. Since the Win GDI implementation
+//   is mostly software based, it will likely share this code with the
+//   32-bit MS-DOS port, as well as the Linux software implementation.
+// This will be confirmed as development progresses.
+
+// Win32 GDI Canvas primitives
+unsigned gdiPixelAt( LucCanvas* canvas, int x, int y );
+
+unsigned gdiDrawPixel( LucCanvas* canvas, int x, int y,
+  unsigned color );
+
+unsigned gdiBlendPixel( LucCanvas* canvas, int x, int y,
+  unsigned color );
+
+unsigned gdiDrawCircle( LucCanvas* canvas, int x, int y,
+  unsigned radius, unsigned color );
+
+unsigned gdiFillCircle( LucCanvas* canvas, int x, int y,
+  unsigned radius, unsigned color );
+
+unsigned gdiBlendCircle( LucCanvas* canvas, int x, int y,
+  unsigned radius, unsigned color );
+
+unsigned gdiBlendfillCircle( LucCanvas* canvas, int x, int y,
+  unsigned radius, unsigned color );
+
+unsigned gdiDrawEllipse( LucCanvas* canvas, int x, int y,
+  unsigned hradius, unsigned vradius, unsigned color );
+
+unsigned gdiFillEllipse( LucCanvas* canvas, int x, int y,
+  unsigned hradius, unsigned vradius, unsigned color );
+
+unsigned gdiBlendEllipse( LucCanvas* canvas, int x, int y,
+  unsigned hradius, int vradius, unsigned color );
+
+unsigned gdiBlendfillEllipse( LucCanvas* canvas, int x, int y,
+  unsigned hradius, int vradius, unsigned color );
+
+unsigned gdiDrawRect( LucCanvas* canvas, int x, int y,
+  unsigned width, unsigned height, unsigned color );
+
+unsigned gdiFillRect( LucCanvas* canvas, int x, int y,
+  unsigned width, unsigned height, unsigned color );
+
+unsigned gdiBlendRect( LucCanvas* canvas, int x, int y,
+  unsigned width, unsigned height, unsigned color );
+
+unsigned gdiBlendfillRect( LucCanvas* canvas, int x, int y,
+  unsigned width, unsigned height, unsigned color );
+
+unsigned gdiDrawPoly( LucCanvas* canvas, int x, int y,
+  LucPoly* polygon, unsigned color );
+
+unsigned gdiFillPoly( LucCanvas* canvas, int x, int y,
+  LucPoly* polygon, unsigned color );
+
+unsigned gdiBlendPoly( LucCanvas* canvas, int x, int y,
+  LucPoly* polygon, unsigned color );
+
+unsigned gdiBlendfillPoly( LucCanvas* canvas, int x, int y,
+  LucPoly* polygon, unsigned color );
+
+// Canvas blitters
+unsigned gdiDrawImage( LucCanvas* canvas, int x, int y,
+  LucImage* image, LucRect* imageRect );
+
+unsigned gdiDrawImageH( LucCanvas* canvas, int x, int y,
+  LucImage* image, LucRect* imageRect );
+
+unsigned gdiDrawImageV( LucCanvas* canvas, int x, int y,
+  LucImage* image, LucRect* imageRect );
+
+unsigned gdiDrawImageHV( LucCanvas* canvas, int x, int y,
+  LucImage* image, LucRect* imageRect );
+
+unsigned gdiDrawImageRS( LucCanvas* canvas, int x, int y,
+  LucImage* image, LucRect* imageRect, int rotateBy, int scaleBy );
+
+unsigned gdiTransImage( LucCanvas* canvas, int x, int y,
+  LucImage* image, LucRect* imageRect );
+
+unsigned gdiTransImageH( LucCanvas* canvas, int x, int y,
+  LucImage* image, LucRect* imageRect );
+
+unsigned gdiTransImageV( LucCanvas* canvas, int x, int y,
+  LucImage* image, LucRect* imageRect );
+
+unsigned gdiTransImageHV( LucCanvas* canvas, int x, int y,
+  LucImage* image, LucRect* imageRect );
+
+unsigned gdiTransImageRS( LucCanvas* canvas, int x, int y,
+  LucImage* image, LucRect* imageRect, int rotateBy, int scaleBy );
+
+unsigned gdiBlendImage( LucCanvas* canvas, int x, int y,
+  LucImage* image, LucRect* imageRect );
+
+unsigned gdiBlendImageH( LucCanvas* canvas, int x, int y,
+  LucImage* image, LucRect* imageRect );
+
+unsigned gdiBlendImageV( LucCanvas* canvas, int x, int y,
+  LucImage* image, LucRect* imageRect );
+
+unsigned gdiBlendImageHV( LucCanvas* canvas, int x, int y,
+  LucImage* image, LucRect* imageRect );
+
+unsigned gdiBlendImageRS( LucCanvas* canvas, int x, int y,
+  LucImage* image, LucRect* imageRect, int rotateBy, int scaleBy );
+
+unsigned gdiDrawRLE0( LucCanvas* canvas, int x, int y,
+  LucImage* image, LucRect* imageRect );
+
+unsigned gdiDrawRLE0H( LucCanvas* canvas, int x, int y,
+  LucImage* image, LucRect* imageRect );
+
+unsigned gdiDrawRLE0V( LucCanvas* canvas, int x, int y,
+  LucImage* image, LucRect* imageRect );
+
+unsigned gdiDrawRLE0HV( LucCanvas* canvas, int x, int y,
+  LucImage* image, LucRect* imageRect );
+
+unsigned gdiDrawRLE0RS( LucCanvas* canvas, int x, int y,
+  LucImage* image, LucRect* imageRect, int rotateBy, int scaleBy );
+
+unsigned gdiTransRLE0( LucCanvas* canvas, int x, int y,
+  LucImage* image, LucRect* imageRect );
+
+unsigned gdiTransRLE0H( LucCanvas* canvas, int x, int y,
+  LucImage* image, LucRect* imageRect );
+
+unsigned gdiTransRLE0V( LucCanvas* canvas, int x, int y,
+  LucImage* image, LucRect* imageRect );
+
+unsigned gdiTransRLE0HV( LucCanvas* canvas, int x, int y,
+  LucImage* image, LucRect* imageRect );
+
+unsigned gdiTransRLE0RS( LucCanvas* canvas, int x, int y,
+  LucImage* image, LucRect* imageRect, int rotateBy, int scaleBy );
+
+unsigned gdiBlendRLE0( LucCanvas* canvas, int x, int y,
+  LucImage* image, LucRect* imageRect );
+
+unsigned gdiBlendRLE0H( LucCanvas* canvas, int x, int y,
+  LucImage* image, LucRect* imageRect );
+
+unsigned gdiBlendRLE0V( LucCanvas* canvas, int x, int y,
+  LucImage* image, LucRect* imageRect );
+
+unsigned gdiBlendRLE0HV( LucCanvas* canvas, int x, int y,
+  LucImage* image, LucRect* imageRect );
+
+unsigned gdiBlendRLE0RS( LucCanvas* canvas, int x, int y,
+  LucImage* image, LucRect* imageRect, int rotateBy, int scaleBy );
+
+unsigned gdiDrawMask( LucCanvas* canvas, int x, int y,
+  LucImage* image, LucRect* imageRect );
+
+unsigned gdiDrawMaskH( LucCanvas* canvas, int x, int y,
+  LucImage* image, LucRect* imageRect );
+
+unsigned gdiDrawMaskV( LucCanvas* canvas, int x, int y,
+  LucImage* image, LucRect* imageRect );
+
+unsigned gdiDrawMaskHV( LucCanvas* canvas, int x, int y,
+  LucImage* image, LucRect* imageRect );
+
+unsigned gdiDrawMaskRS( LucCanvas* canvas, int x, int y,
+  LucImage* image, LucRect* imageRect, int rotateBy, int scaleBy );
+
+unsigned gdiTransMask( LucCanvas* canvas, int x, int y,
+  LucImage* image, LucRect* imageRect );
+
+unsigned gdiTransMaskH( LucCanvas* canvas, int x, int y,
+  LucImage* image, LucRect* imageRect );
+
+unsigned gdiTransMaskV( LucCanvas* canvas, int x, int y,
+  LucImage* image, LucRect* imageRect );
+
+unsigned gdiTransMaskHV( LucCanvas* canvas, int x, int y,
+  LucImage* image, LucRect* imageRect );
+
+unsigned gdiTransMaskRS( LucCanvas* canvas, int x, int y,
+  LucImage* image, LucRect* imageRect, int rotateBy, int scaleBy );
+
+unsigned gdiBlendMask( LucCanvas* canvas, int x, int y,
+  LucImage* image, LucRect* imageRect );
+
+unsigned gdiBlendMaskH( LucCanvas* canvas, int x, int y,
+  LucImage* image, LucRect* imageRect );
+
+unsigned gdiBlendMaskV( LucCanvas* canvas, int x, int y,
+  LucImage* image, LucRect* imageRect );
+
+unsigned gdiBlendMaskHV( LucCanvas* canvas, int x, int y,
+  LucImage* image, LucRect* imageRect );
+
+unsigned gdiBlendMaskRS( LucCanvas* canvas, int x, int y,
+  LucImage* image, LucRect* imageRect, int rotateBy, int scaleBy );
 
 =================
 = I/O Hierarchy =
@@ -347,11 +851,12 @@ typedef struct LucIO {
 } LucIO;
 
 typedef struct LucFile {
-  0,
+  size_t(LucFile); // = sizeof(LucFile) [mem] or 0 [var]
 
   LucFilePositionFunc getFilePosition;
   LucSetFilePositionFunc setFilePosition;
-  LucReadBlockFunc read;
+  LucReadBlockFunc readBlock;
+  LucWriteBlockFunc writeBlock;
 } LucFile;
 
 size_t lucFilePosition
@@ -396,8 +901,8 @@ unsigned lucCloseFile( LucIO** filePointer );
 
 #include "lucimpl.h"
 
-typedef struct ImageReader {
-  sizeof(LucIO),
+typedef struct LucImageReader {
+  size_t structSize; // = sizeof(LucImageReader) [mem] or 0 [var]
 
   LucReadImageLine1Func readLine1;
   LucReadImageLine8Func readLine8;
@@ -406,43 +911,45 @@ typedef struct ImageReader {
   LucReadImageLine32Func readLine32;
 
   LucIO* fileIO;
-} ImageReader;
+} LucImageReader;
 
 #include "lucere.h"
 
-unsigned lucReadLine1( ImageReader* sourceImage, uint8* pixelBuffer,
+unsigned lucReadLine1( LucImageReader* sourceImage, uint8* pixelBuffer,
   LucPixelFormat* pixelFormat, size_t pixelOffset, size_t pixelCount,
   LucQuantizer* quantizer );
 
-unsigned lucReadLine8( ImageReader* sourceImage, uint8* pixelBuffer,
+unsigned lucReadLine8( LucImageReader* sourceImage, uint8* pixelBuffer,
   LucPixelFormat* pixelFormat, size_t pixelOffset, size_t pixelCount,
   LucQuantizer* quantizer );
 
-unsigned lucReadLine16( ImageReader* sourceImage, uint8* pixelBuffer,
+unsigned lucReadLine16( LucImageReader* sourceImage, uint8* pixelBuffer,
   LucPixelFormat* pixelFormat, size_t pixelOffset, size_t pixelCount,
   LucQuantizer* quantizer );
 
-unsigned lucReadLine24( ImageReader* sourceImage, uint8* pixelBuffer,
+unsigned lucReadLine24( LucImageReader* sourceImage, uint8* pixelBuffer,
   LucPixelFormat* pixelFormat, size_t pixelOffset, size_t pixelCount,
   LucQuantizer* quantizer );
 
-unsigned lucReadLine32( ImageReader* sourceImage, uint8* pixelBuffer,
+unsigned lucReadLine32( LucImageReader* sourceImage, uint8* pixelBuffer,
   LucPixelFormat* pixelFormat, size_t pixelOffset, size_t pixelCount,
   LucQuantizer* quantizer );
 
-LucImage* lucLoadImage1( ImageReader* sourceImage, LucRect* sourceRect,
+#include "lucere.h"
+
+LucImage* lucLoadImage1( LucImageReader* sourceImage, LucRect* sourceRect,
   LucCanvas* canvas, LucQuantizer* quantizer );
 
-LucImage* lucLoadImage8( ImageReader* sourceImage, LucRect* sourceRect,
+LucImage* lucLoadImage8( LucImageReader* sourceImage, LucRect* sourceRect,
   LucCanvas* canvas, LucQuantizer* quantizer );
 
-LucImage* lucLoadImage16( ImageReader* sourceImage, LucRect* sourceRect,
+LucImage* lucLoadImage16( LucImageReader* sourceImage, LucRect* sourceRect,
   LucCanvas* canvas, LucQuantizer* quantizer );
 
-LucImage* lucLoadImage24( ImageReader* sourceImage, LucRect* sourceRect,
+LucImage* lucLoadImage24( LucImageReader* sourceImage, LucRect* sourceRect,
   LucCanvas* canvas, LucQuantizer* quantizer );
 
-LucImage* lucLoadImage32( ImageReader* sourceImage, LucRect* sourceRect,
+LucImage* lucLoadImage32( LucImageReader* sourceImage, LucRect* sourceRect,
   LucCanvas* canvas, LucQuantizer* quantizer );
 
 #include "lucere.h"
@@ -455,59 +962,93 @@ LucImage* lucLoadRawRLE0( LucIO* sourceIO, LucRect* sourceRect,
   LucCanvas* canvas, LucQuantizer* quantizer );
 
 LucImage* lucLoadRawMask( LucIO* sourceIO, LucRect* sourceRect,
-  unsigned colorBit0, unsigned colorBit1,
   LucCanvas* canvas, LucQuantizer* quantizer );
 
 // Load 32-bit RGBA palette from file
 unsigned lucLoadRawPalette( LucIO* sourceIO, LucCanvas* canvas );
 
 // Load external format into Lucere format image/mask
-LucImage* lucLoadImage( ImageReader* sourceImage, LucRect* sourceRect,
+LucImage* lucLoadImage( LucImageReader* sourceImage, LucRect* sourceRect,
   LucCanvas* canvas, LucQuantizer* quantizer );
 
-LucImage* lucLoadRLE0( ImageReader* sourceImage, LucRect* sourceRect,
+LucImage* lucLoadRLE0( LucImageReader* sourceImage, LucRect* sourceRect,
   LucCanvas* canvas, LucQuantizer* quantizer );
 
-LucImage* lucLoadMask( ImageReader* sourceImage, LucRect* sourceRect,
-  unsigned colorBit0, unsigned colorBit1,
+LucImage* lucLoadMask( LucImageReader* sourceImage, LucRect* sourceRect,
   LucCanvas* canvas, LucQuantizer* quantizer );
 
-unsigned lucLoadCanvas( ImageReader* sourceImage, LucRect* sourceRect,
+unsigned lucLoadCanvas( LucImageReader* sourceImage, LucRect* sourceRect,
   LucCanvas* canvas, LucQuantizer* quantizer );
 
-LucSurface* lucLoadSurface( ImageReader* sourceImage, LucRect* sourceRect,
+LucSurface* lucLoadSurface( LucImageReader* sourceImage, LucRect* sourceRect,
   LucCanvas* canvas, LucQuantizer* quantizer );
 
 #include "lucimpl.h"
 
-typedef struct ImageWriter {
-  LucIO* io;
+typedef struct LucImageWriter {
+  size_t structSize; // = sizeof(LucImageWriter) [mem] or 0 [var]
 
   LucWriteImageLine1Func writeLine1;
   LucWriteImageLine8Func writeLine8;
   LucWriteImageLine16Func writeLine16;
   LucWriteImageLine24Func writeLine24;
   LucWriteImageLine32Func writeLine32;
-} ImageWriter;
 
-unsigned lucWriteImageLine1( ImageWriter* destImage,
+  LucIO* fileIO;
+} LucImageWriter;
 
 #include "lucere.h"
 
-unsigned lucSaveImage( ImageWriter* destImage, LucRect* destRect,
-  LucImage* image, LucQuantizer* quantizer );
-
-unsigned lucSaveRLE0( ImageWriter* destImage, LucRect* destRect,
-  LucImage* image, LucQuantizer* quantizer );
-
-unsigned lucSaveMask( ImageWriter* destImage, LucRect* destRect,
-  LucImage* image, unsigned bitClearColor, unsigned bitSetColor,
+unsigned lucWriteLine1( LucImageWriter* destImage, uint8* pixelBuffer,
+  LucPixelFormat* pixelFormat, size_t pixelOffset, size_t pixelCount,
   LucQuantizer* quantizer );
 
-unsigned lucSaveCanvas( ImageWriter* destImage, LucRect* destRect,
+unsigned lucWriteLine8( LucImageWriter* destImage, uint8* pixelBuffer,
+  LucPixelFormat* pixelFormat, size_t pixelOffset, size_t pixelCount,
+  LucQuantizer* quantizer );
+
+unsigned lucWriteLine16( LucImageWriter* destImage, uint8* pixelBuffer,
+  LucPixelFormat* pixelFormat, size_t pixelOffset, size_t pixelCount,
+  LucQuantizer* quantizer );
+
+unsigned lucWriteLine24( LucImageWriter* destImage, uint8* pixelBuffer,
+  LucPixelFormat* pixelFormat, size_t pixelOffset, size_t pixelCount,
+  LucQuantizer* quantizer );
+
+unsigned lucWriteLine32( LucImageWriter* destImage, uint8* pixelBuffer,
+  LucPixelFormat* pixelFormat, size_t pixelOffset, size_t pixelCount,
+  LucQuantizer* quantizer );
+
+#include "lucere.h"
+
+// Save Lucere format image/mask from file
+LucImage* lucSaveRawImage( LucIO* destIO, LucRect* destRect,
   LucCanvas* canvas, LucQuantizer* quantizer );
 
-unsigned lucSaveSurface( ImageWriter* destImage, LucRect* destRect,
+LucImage* lucSaveRawRLE0( LucIO* destIO, LucRect* destRect,
+  LucCanvas* canvas, LucQuantizer* quantizer );
+
+LucImage* lucSaveRawMask( LucIO* destIO, LucRect* destRect,
+  LucCanvas* canvas, LucQuantizer* quantizer );
+
+// Save 32-bit RGBA palette to file
+unsigned lucSaveRawPalette( LucIO* destIO, LucCanvas* canvas );
+
+#include "lucere.h"
+
+unsigned lucSaveImage( LucImageWriter* destImage, LucRect* destRect,
+  LucImage* image, LucQuantizer* quantizer );
+
+unsigned lucSaveRLE0( LucImageWriter* destImage, LucRect* destRect,
+  LucImage* image, LucQuantizer* quantizer );
+
+unsigned lucSaveMask( LucImageWriter* destImage, LucRect* destRect,
+  LucImage* image, LucQuantizer* quantizer );
+
+unsigned lucSaveCanvas( LucImageWriter* destImage, LucRect* destRect,
+  LucCanvas* canvas, LucQuantizer* quantizer );
+
+unsigned lucSaveSurface( LucImageWriter* destImage, LucRect* destRect,
   LucSurface* surface, LucSurfaceInfo* surfaceInfo,
   LucQuantizer* quantizer );
 
@@ -515,17 +1056,17 @@ unsigned lucSaveSurface( ImageWriter* destImage, LucRect* destRect,
 = PNG Image File Interface =
 ============================
 
+#include "lucimpl.h"
+
+typedef struct PngReader {
+  size_t structSize; // = sizeof(PngReader) [mem] or 0 [var]
+
+  ...
+
+  ... // PNG specific variables
+} PngReader;
+
 #include "lucere.h"
-
-const ImageReader PngReader = {
-  NULL,
-
-  pngReadLine1,
-  pngReadLine8,
-  pngReadLine16,
-  pngReadLine24,
-  pngReadLine32
-};
 
 ImageReader* pngOpenImage( LucIO* sourceFile );
 
@@ -533,11 +1074,132 @@ ImageReader* pngOpenImageFile( const char* fileName );
 
 unsigned pngCloseImage( LucImageReader** pngReaderPtr );
 
+unsigned pngReadLine1( LucImageReader* sourceImage, uint8* pixelBuffer,
+  LucPixelFormat* pixelFormat, size_t pixelOffset, size_t pixelCount,
+  LucQuantizer* quantizer );
+
+unsigned pngReadLine8( LucImageReader* sourceImage, uint8* pixelBuffer,
+  LucPixelFormat* pixelFormat, size_t pixelOffset, size_t pixelCount,
+  LucQuantizer* quantizer );
+
+unsigned pngReadLine16( LucImageReader* sourceImage, uint8* pixelBuffer,
+  LucPixelFormat* pixelFormat, size_t pixelOffset, size_t pixelCount,
+  LucQuantizer* quantizer );
+
+unsigned pngReadLine24( LucImageReader* sourceImage, uint8* pixelBuffer,
+  LucPixelFormat* pixelFormat, size_t pixelOffset, size_t pixelCount,
+  LucQuantizer* quantizer );
+
+unsigned pngReadLine32( LucImageReader* sourceImage, uint8* pixelBuffer,
+  LucPixelFormat* pixelFormat, size_t pixelOffset, size_t pixelCount,
+  LucQuantizer* quantizer );
+
+#include "lucimpl.h"
+
+typedef struct PngImageWriter {
+  size_t structSize; // = sizeof(PngImageWriter) [mem] or 0 [var]
+
+  ...
+
+  ... // PNG specific variables
+} PngImageWriter;
+
+#include "lucere.h"
+
+unsigned pngWriteLine1( LucImageWriter* destImage, uint8* pixelBuffer,
+  LucPixelFormat* pixelFormat, size_t pixelOffset, size_t pixelCount,
+  LucQuantizer* quantizer );
+
+unsigned pngWriteLine8( LucImageWriter* destImage, uint8* pixelBuffer,
+  LucPixelFormat* pixelFormat, size_t pixelOffset, size_t pixelCount,
+  LucQuantizer* quantizer );
+
+unsigned pngWriteLine16( LucImageWriter* destImage, uint8* pixelBuffer,
+  LucPixelFormat* pixelFormat, size_t pixelOffset, size_t pixelCount,
+  LucQuantizer* quantizer );
+
+unsigned pngWriteLine24( LucImageWriter* destImage, uint8* pixelBuffer,
+  LucPixelFormat* pixelFormat, size_t pixelOffset, size_t pixelCount,
+  LucQuantizer* quantizer );
+
+unsigned pngWriteLine32( LucImageWriter* destImage, uint8* pixelBuffer,
+  LucPixelFormat* pixelFormat, size_t pixelOffset, size_t pixelCount,
+  LucQuantizer* quantizer );
+
 ===================
 = Image Interface =
 ===================
 
+#include "lucimpl.h"
+
+typedef struct LucImage {
+  size_t structSize;
+  // = sizeof(LucImage) + paddingSize + dataSize [mem] or 0 [var]
+
+  LucReleaseImageFunc releaseImage;
+  LucImageSurfaceTypeFunc surfaceType;
+  LucImageBeginSurfaceFunc beginSurface;
+  LucImageEndSurfaceFunc endSurface;
+
+  size_t paddingSize;
+  size_t dataSize;
+
+  unsigned imageFormat;
+  unsigned width;
+  unsigned height;
+  unsigned bpp;
+  unsigned rgbaShift;
+  unsigned rgbaSize;
+
+  // Padding
+
+  // Data
+} LucImage;
+
 #include "lucere.h"
+
+unsigned lucImageSurfaceType( LucImage* image );
+
+LucSurface* lucAccessImageSurface( LucImage* image,
+  LucSurfaceInfo* destSurfaceInfo );
+
+unsigned lucEndImageSurface( LucSurface** surfacePointer );
+
+unsigned lucImageWidth( LucImage* image );
+
+unsigned lucImageHeight( LucImage* image );
+
+unsigned lucImagePixelFormat( LucImage* image,
+  LucPixelFormat* pixelFormat );
+
+=============================
+= Win32 GDI Image Interface =
+=============================
+
+#include "lucimpl.h"
+
+typedef struct Win32GdiImage {
+  size_t structSize;
+  // = sizeof(Win32GdiImage) + paddingSize + dataSize [mem] or 0 [var]
+
+  ...
+
+  HBITMAP dibSection;
+
+  // Padding
+
+  // Data
+} Win32GdiImage;
+
+unsigned gdiImageSurfaceType( LucImage* image );
+
+LucImage* gdiCreateImage( Canvas* canvas, unsigned width, unsigned height );
+
+unsigned gdiReleaseImage( LucImage** imagePointer );
+
+LucSurface* gdiAccessImageSurface( LucImage* image );
+
+unsigned gdiReleaseImageSurface( LucSurface** surfacePointer );
 
 ===================
 = World Interface =
