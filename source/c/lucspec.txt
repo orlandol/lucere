@@ -80,6 +80,8 @@ CGA
 
 #include "lucere.h"
 
+typedef struct LucAppImpl LucApp;
+
 LucApp* lucCreateApp( const char* title, unsigned width, unsigned height,
     unsigned flags, LucEventRouter eventRouter );
 
@@ -98,7 +100,7 @@ unsigned lucWaitForNextEvent( LucApp* app );
 #include "lucimpl.h"
 
 typedef struct LucApp {
-  size_t structSize; // == sizeof(LucApp) [mem] or 0 [var]
+  size_t structSize; // == sizeof(LucApp)
 
   HWND window;
   HINSTANCE instance;
@@ -139,9 +141,13 @@ LucApp = [System]App
 = Graphics Interface =
 ======================
 
+#include "lucere.h"
+
+typedef struct LucGraphicsSystemImpl LucGraphicsSystem;
+
 #include "lucimpl.h"
 
-typedef struct LucGraphicsSystem {
+typedef struct LucGraphicsSystemImpl {
   LucCreateDisplayFunc createDisplay;
 
   // Display interface
@@ -169,7 +175,7 @@ typedef struct LucGraphicsSystem {
   LucImageReleaseSurfaceFunc releaseImageSurface;
 
   // Surface interface
-} LucGraphicsSystem;
+} LucGraphicsSystemImpl;
 
 =====================
 = Display Interface =
@@ -177,15 +183,21 @@ typedef struct LucGraphicsSystem {
 
 #include "lucere.h"
 
-typedef struct LucDisplay {
-  size_t structSize; // = sizeof(LucDisplay) [mem] or 0 [var]
+typedef struct LucDisplayImpl LucDisplay;
+
+#include "lucimpl.h"
+
+typedef struct LucDisplayImpl {
+  size_t structSize; // = sizeof(LucDisplay)
 
   LucReleaseDisplayFunc releaseDisplay;
   LucCenterCanvasFunc centerCanvas;
   LucFitCanvasHFunc fitCanvasH;
   LucFitCanvasVFunc fitCanvasV;
   LucStretchCanvasFunc stretchCanvas;
-} LucDisplay;
+} LucDisplayImpl;
+
+#include "lucere.h"
 
 unsigned lucDisplayCount( LucApp* app );
 
@@ -213,7 +225,7 @@ unsigned lucDrawCanvas( LucDisplay* display, LucCanvas* canvas );
 #include "lucimpl.h"
 
 typedef struct Win32GdiDisplay {
-  size_t structSize; // = sizeof(Win32GdiDisplay) [mem] or 0 [var]
+  size_t structSize; // = sizeof(Win32GdiDisplay)
 
   ...
 
@@ -241,10 +253,14 @@ unsigned gdiStretchCanvas( LucDisplay* display, LucCanvas* canvas );
 = Canvas Interface =
 ====================
 
+#include "lucere.h"
+
+typedef struct LucCanvasImpl LucCanvas;
+
 #include "lucimpl.h"
 
-typedef struct LucCanvas {
-  size_t structSize; // = sizeof(LucCanvas) [mem] or 0 [var]
+typedef struct LucCanvasImpl {
+  size_t structSize; // = sizeof(LucCanvas)
 
   LucClearFunc clear;
 
@@ -300,7 +316,9 @@ typedef struct LucCanvas {
 
   LucBlendMaskFunc blendMask;
   LucBlendMaskRSFunc blendMaskRS;
-} LucCanvas;
+} LucCanvasImpl;
+
+#include "lucere.h"
 
 unsigned lucClearCanvas( LucCanvas* canvas, unsigned color );
 
@@ -423,7 +441,7 @@ unsigned lucBlendMaskRS( LucCanvas* canvas, int x, int y,
 #include "lucimpl.h"
 
 typedef struct Win32GdiCanvas {
-  size_t structSize; // = sizeof(Win32GdiCanvas) [mem] or 0 [var]
+  size_t structSize; // = sizeof(Win32GdiCanvas)
 
   ...
 
@@ -603,7 +621,7 @@ typedef struct LucIO {
 } LucIO;
 
 typedef struct LucFile {
-  size_t(LucFile); // = sizeof(LucFile) [mem] or 0 [var]
+  size_t(LucFile); // = sizeof(LucFile)
 
   LucFilePositionFunc getFilePosition;
   LucSetFilePositionFunc setFilePosition;
@@ -654,7 +672,7 @@ unsigned lucCloseFile( LucIO** filePointer );
 #include "lucimpl.h"
 
 typedef struct LucImageReader {
-  size_t structSize; // = sizeof(LucImageReader) [mem] or 0 [var]
+  size_t structSize; // = sizeof(LucImageReader)
 
   LucReadImageLine1Func readLine1;
   LucReadImageLine8Func readLine8;
@@ -738,7 +756,7 @@ LucSurface* lucLoadSurface( LucImageReader* sourceImage, LucRect* sourceRect,
 #include "lucimpl.h"
 
 typedef struct LucImageWriter {
-  size_t structSize; // = sizeof(LucImageWriter) [mem] or 0 [var]
+  size_t structSize; // = sizeof(LucImageWriter)
 
   LucWriteImageLine1Func writeLine1;
   LucWriteImageLine8Func writeLine8;
@@ -808,15 +826,19 @@ unsigned lucSaveSurface( LucImageWriter* destImage, LucRect* destRect,
 = PNG Image File Interface =
 ============================
 
+#include "lucere.h"
+
+typedef struct PngReaderImpl PngReader;
+
 #include "lucimpl.h"
 
-typedef struct PngReader {
-  size_t structSize; // = sizeof(PngReader) [mem] or 0 [var]
+typedef struct PngReaderImpl {
+  size_t structSize; // = sizeof(PngReader)
 
-  ...
+  ... // LucImageReader delegate pointers and data fields
 
   ... // PNG specific variables
-} PngReader;
+} PngReaderImpl;
 
 #include "lucere.h"
 
@@ -846,15 +868,19 @@ unsigned pngReadLine32( LucImageReader* sourceImage, uint8* pixelBuffer,
   LucPixelFormat* pixelFormat, size_t pixelOffset, size_t pixelCount,
   LucQuantizer* quantizer );
 
+#include "lucere.h"
+
+typedef struct PngImageWriterImpl PngImageWriter;
+
 #include "lucimpl.h"
 
-typedef struct PngImageWriter {
-  size_t structSize; // = sizeof(PngImageWriter) [mem] or 0 [var]
+typedef struct PngImageWriterImpl {
+  size_t structSize; // = sizeof(PngImageWriter)
 
-  ...
+  ... // LucImageWriter delegate pointers and data fields
 
   ... // PNG specific variables
-} PngImageWriter;
+} PngImageWriterImpl;
 
 #include "lucere.h"
 
@@ -886,12 +912,7 @@ unsigned pngWriteLine32( LucImageWriter* destImage, uint8* pixelBuffer,
 
 typedef struct LucImage {
   size_t structSize;
-  // = sizeof(LucImage) + paddingSize + dataSize [mem] or 0 [var]
-
-  LucReleaseImageFunc releaseImage;
-  LucImageSurfaceTypeFunc surfaceType;
-  LucImageBeginSurfaceFunc beginSurface;
-  LucImageEndSurfaceFunc endSurface;
+  // = sizeof(LucImage) + paddingSize + dataSize
 
   size_t paddingSize;
   size_t dataSize;
@@ -902,6 +923,11 @@ typedef struct LucImage {
   unsigned bpp;
   unsigned rgbaShift;
   unsigned rgbaSize;
+
+  LucReleaseImageFunc releaseImage;
+  LucImageSurfaceTypeFunc surfaceType;
+  LucImageBeginSurfaceFunc beginSurface;
+  LucImageEndSurfaceFunc endSurface;
 
   // Padding
 
@@ -932,9 +958,9 @@ unsigned lucImagePixelFormat( LucImage* image,
 
 typedef struct Win32GdiImage {
   size_t structSize;
-  // = sizeof(Win32GdiImage) + paddingSize + dataSize [mem] or 0 [var]
+  // = sizeof(Win32GdiImage) + paddingSize + dataSize
 
-  ...
+  ... // LucImage delegate pointers and variables
 
   HBITMAP dibSection;
 
@@ -956,7 +982,5 @@ unsigned gdiReleaseImageSurface( LucSurface** surfacePointer );
 ===================
 = World Interface =
 ===================
-
-#include "lucere.h"
 
 ========================================

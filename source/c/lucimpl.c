@@ -2,12 +2,17 @@
 #include "lucere.h"
 #include "lucimpl.h"
 
+#ifdef _WIN32
 /*
  *  Win32 Application implementation
  */
 
 LucApp* lucCreateApp( const char* title, unsigned width, unsigned height,
-  unsigned flags, LucEventRouter customRouter ) {
+    unsigned flags, LucEventRouter customRouter ) {
+
+  Win32AppImpl* newApp = NULL;
+
+  newApp = calloc(1, sizeof(Win32AppImpl));
 
   return NULL;
 }
@@ -59,3 +64,5 @@ LucDisplay* gdiDisplayCreate( LucApp* app, unsigned monitorIndex,
 unsigned gdiDisplayRelease( LucDisplay** displayPtr ) {
   return 2;
 }
+
+#endif // __WIN32

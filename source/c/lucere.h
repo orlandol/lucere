@@ -2,27 +2,29 @@
 #define LUCERE_H
 
 #ifdef _WIN32
-/*
- *  Win32 event router declarations
- */
 
-#include "windows.h"
+  /*
+   *  Win32 event router declarations
+   */
 
-typedef WNDPROC LucEventRouter;
+  #include "windows.h"
 
-#define LUC_DECLARE_EVENTROUTER(name) \
-  LRESULT name( HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam );
+  typedef WNDPROC LucEventRouter;
 
-#define LUC_BEGIN_EVENTROUTER_IMPLEMENTATION(name) \
-  LRESULT name( HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam ) {
+  #define LUC_DECLARE_EVENTROUTER(name) \
+    LRESULT name( HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam );
 
-#define LUC_ROUTE_EVENTS() \
-  switch( Msg ) { \
-  }
+  #define LUC_BEGIN_EVENTROUTER_IMPLEMENTATION(name) \
+    LRESULT name( HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam ) {
 
-#define LUC_END_EVENTROUTER_IMPLEMENTATION() \
-    return DefWindowProc(hWnd, Msg, wParam, lParam); \
-  }
+  #define LUC_ROUTE_EVENTS() \
+      switch( Msg ) { \
+      }
+
+  #define LUC_END_EVENTROUTER_IMPLEMENTATION() \
+      return DefWindowProc(hWnd, Msg, wParam, lParam); \
+    }
+
 #endif // _WIN32
 
 /*
