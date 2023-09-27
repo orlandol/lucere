@@ -16,6 +16,10 @@
 
 typedef struct LucAppImpl {
   size_t structSize;
+
+  unsigned friendlyError;
+  unsigned errorIndex;
+
   HANDLE window;
   HINSTANCE instance;
 } LucAppImpl;
@@ -28,6 +32,16 @@ typedef struct LucSurfaceInfoImpl {
   size_t structSize; // = sizeof(LucSurfaceInfo) [mem] or 0 [var]
 } LucSurfaceInfoImpl;
 
+typedef unsigned (*LucReleaseSurfaceFunc)( LucSurface** surfacePointer );
+
+typedef struct LucSurfaceImpl {
+  size_t structSize; // = sizeof(LucSurfaceImpl);
+
+  LucReleaseSurfaceFunc releaseSurface;
+
+  unsigned char* surface;
+} LucSurfaceImpl;
+
 /*
  *  Abstract Graphics System declarations
  */
@@ -38,13 +52,13 @@ typedef LucDisplay* (*LucCreateDisplayFunc)( LucApp* app,
 // Display prototypes
 typedef unsigned (*LucReleaseDisplayFunc)( LucDisplay** displayPtr );
 
-typedef unsigned (*LucCenterCanvas)( LucDisplay* display,
+typedef unsigned (*LucCenterCanvasFunc)( LucDisplay* display,
   LucCanvas* canvas );
-typedef unsigned (*LucFitCanvasH)( LucDisplay* display,
+typedef unsigned (*LucFitCanvasHFunc)( LucDisplay* display,
   LucCanvas* canvas );
-typedef unsigned (*LucFitCanvasV)( LucDisplay* display,
+typedef unsigned (*LucFitCanvasVFunc)( LucDisplay* display,
   LucCanvas* canvas );
-typedef unsigned (*LucStretchCanvas)( LucDisplay* display,
+typedef unsigned (*LucStretchCanvasFunc)( LucDisplay* display,
   LucCanvas* canvas );
 
 typedef LucCanvas* (*LucCreateCanvasFunc)( LucDisplay* display,
@@ -53,22 +67,22 @@ typedef LucCanvas* (*LucCreateCanvasFunc)( LucDisplay* display,
 // Canvas prototypes
 typedef unsigned (*LucReleaseCanvasFunc)( LucCanvas** canvasPointer );
 
-typedef unsigned (*LucCanvasSurfaceType)( LucCanvas* canvas );
+typedef unsigned (*LucCanvasSurfaceTypeFunc)( LucCanvas* canvas );
 
-typedef LucSurface* (*LucAccessCanvasSurface)( LucCanvas* canvas,
+typedef LucSurface* (*LucAccessCanvasSurfaceFunc)( LucCanvas* canvas,
   LucSurfaceInfo* destSurfaceInfo );
 
-typedef unsigned (*LucReleaseCanvasSurface)( LucCanvas** canvasPointer );
+typedef unsigned (*LucReleaseCanvasSurfaceFunc)( LucCanvas** canvasPointer );
 
 // Image prototypes
 typedef unsigned (*LucReleaseImageFunc)( LucImage** imagePointer );
 
 typedef unsigned (*LucImageSurfaceTypeFunc)( LucCanvas* canvas );
 
-typedef LucSurface* (*LucImageAccessSurfaceFunc)( LucCanvas* canvas,
+typedef LucSurface* (*LucAccessImageSurfaceFunc)( LucCanvas* canvas,
   LucSurfaceInfo* destSurfaceInfo );
 
-typedef unsigned (*LucImageReleaseSurfaceFunc)(
+typedef unsigned (*LucReleaseImageSurfaceFunc)(
   LucSurface** surfacePointrer );
 
 // Graphics System Interface
@@ -88,7 +102,7 @@ typedef struct LucGraphicsSystemImpl {
   // Canvas interface
   LucReleaseCanvasFunc releaseCanvas;
 
-  LucCanvasSurfaceType canvasSurfaceType;
+  LucCanvasSurfaceTypeFunc canvasSurfaceType;
   LucAccessCanvasSurfaceFunc accessCanvasSurface;
   LucReleaseCanvasSurfaceFunc releaseCanvasSurface;
 
@@ -96,8 +110,8 @@ typedef struct LucGraphicsSystemImpl {
   LucReleaseImageFunc releaseImage;
 
   LucImageSurfaceTypeFunc imageSurfaceType;
-  LucImageAccessSurfaceFunc accessImageSurface;
-  LucImageReleaseSurfaceFunc releaseImageSurface;
+  LucAccessImageSurfaceFunc accessImageSurface;
+  LucReleaseImageSurfaceFunc releaseImageSurface;
 
   // Surface interface
 } LucGraphicsSystemImpl;
@@ -112,6 +126,16 @@ LucDisplay* gdiDisplayCreate( LucApp* app, unsigned monitorIndex,
   LucGraphicsSystem* graphicsSystem );
 
 unsigned gdiDisplayRelease( LucDisplay** displayPtr );
+
+/*
+ *  Abstract Image internal declarations
+ */
+
+typedef struct LucImageImpl {
+  size_t structSize; // = sizeof(LucImageImpl)
+
+  LucReleaseImageFunc releaseImage;
+} LucImageImpl;
 
 #endif // _WIN32
 

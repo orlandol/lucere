@@ -1,2 +1,2 @@
 @echo off
-ev lucere.h lucimpl.h lucere.c lucimpl.c lucspec.txt
+ev test1.c lucere.h lucimpl.h lucere.c lucimpl.c lucspec.txt

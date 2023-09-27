@@ -31,6 +31,17 @@
  *  Abstract Application declarations
  */
 
+// Friendly error codes
+enum LucFriendlyErrorCodes {
+  lucInternalError = 1,
+  lucErrorCreatingApp,
+};
+
+// App creation flags
+enum LucCreateAppFlags {
+  appMultiInstance = 1
+};
+
 // App state structure
 typedef struct LucAppImpl LucApp;
 
@@ -51,6 +62,8 @@ unsigned lucWaitForNextEvent( LucApp* app );
  */
 
 typedef struct LucSurfaceInfoImpl LucSurfaceInfo;
+
+typedef struct LucSurfaceImpl LucSurface;
 
 /*
  *  Abstract Graphics declarations
@@ -77,5 +90,11 @@ unsigned lucReleaseDisplay( LucDisplay** displayPtr );
  */
 
 typedef struct LucCanvasImpl LucCanvas;
+
+/*
+ *  Abstract Image declarations
+ */
+
+typedef struct LucImageImpl LucImage;
 
 #endif

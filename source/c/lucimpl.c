@@ -2,17 +2,23 @@
 #include "lucere.h"
 #include "lucimpl.h"
 
+#include <stdlib.h>
+
 #ifdef _WIN32
 /*
  *  Win32 Application implementation
  */
 
+LucApp appError = {};
+
 LucApp* lucCreateApp( const char* title, unsigned width, unsigned height,
     unsigned flags, LucEventRouter customRouter ) {
 
-  Win32AppImpl* newApp = NULL;
+  LucAppImpl* newApp = NULL;
 
-  newApp = calloc(1, sizeof(Win32AppImpl));
+  if( !(title && (*title)) ) { return NULL; }
+
+  newApp = calloc(1, sizeof(LucAppImpl));
 
   return NULL;
 }
