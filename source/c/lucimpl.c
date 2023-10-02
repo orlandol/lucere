@@ -23,7 +23,7 @@ LRESULT CALLBACK win32EventRouter( HWND hwnd, UINT message,
   switch( message ) {
   case WM_DESTROY:
     PostQuitMessage(0);
-    break;
+    return 0;
 
   ///TODO: Handle events that affect window resize, cached draw, etc.
 
@@ -96,7 +96,7 @@ LucApp* lucCreateApp( const char* title, unsigned width, unsigned height,
     0,
     CW_USEDEFAULT, CW_USEDEFAULT,
     width ? width : CW_USEDEFAULT, height ? height : CW_USEDEFAULT,
-    NULL, NULL, NULL, NULL
+    NULL, NULL, newApp->instance, NULL
   );
 
   if( newApp->window ) {
@@ -136,6 +136,7 @@ unsigned lucExitApp( LucApp* app, unsigned returnCode ) {
   if( !(app && app->window) ) { return 1; }
 
   (void)DestroyWindow( app->window );
+  app->window = NULL;
 
   return 0;
 }
@@ -144,6 +145,8 @@ LucEvent lucGetEvent( LucApp* app ) {
   LucEvent tempEvent = {};
 
   if( PeekMessage(&tempEvent.sysmsg, app->window, 0, 0, PM_REMOVE) ) {
+    ///TODO: Check for WM_PAINT with a non-NULL region for removal from queue
+
     switch( tempEvent.sysmsg.message ) {
     case WM_KEYDOWN:
     case WM_KEYUP:
