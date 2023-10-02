@@ -45,10 +45,10 @@ HWND CreateMainWindow( const char* title, unsigned width, unsigned height ) {
     width ? width : CW_USEDEFAULT, height ? height : CW_USEDEFAULT,
     NULL, NULL, NULL, NULL
   );
-  if( newWindow == 0 ) { return NULL; }
-
-  ShowWindow( newWindow, startupInfo.wShowWindow );
-  UpdateWindow( newWindow );
+  if( newWindow ) {
+    ShowWindow( newWindow, startupInfo.wShowWindow );
+    UpdateWindow( newWindow );
+  }
 
   return newWindow;
 }

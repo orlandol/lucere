@@ -2,30 +2,52 @@
 #define LUCERE_H
 
 #ifdef _WIN32
+#include "windows.h"
+#endif
 
-  /*
-   *  Win32 event router declarations
-   */
+#ifdef _WIN32
+/*
+ *  Win32 event router declarations
+ */
 
-  #include "windows.h"
+typedef WNDPROC LucEventRouter;
 
-  typedef WNDPROC LucEventRouter;
+#define LUC_DECLARE_EVENTROUTER(name) \
+  LRESULT name( HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam );
 
-  #define LUC_DECLARE_EVENTROUTER(name) \
-    LRESULT name( HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam );
+#define LUC_BEGIN_EVENTROUTER_IMPLEMENTATION(name) \
+  LRESULT name( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam ) {
 
-  #define LUC_BEGIN_EVENTROUTER_IMPLEMENTATION(name) \
-    LRESULT name( HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam ) {
-
-  #define LUC_ROUTE_EVENTS() \
-      switch( Msg ) { \
-      }
-
-  #define LUC_END_EVENTROUTER_IMPLEMENTATION() \
-      return DefWindowProc(hWnd, Msg, wParam, lParam); \
+#define LUC_ROUTE_EVENTS() \
+    switch( Msg ) { \
     }
 
-#endif // _WIN32
+#define LUC_END_EVENTROUTER_IMPLEMENTATION() \
+    return DefWindowProc(hWnd, Msg, wParam, lParam); \
+  }
+
+#endif // _WIN32 event router declarations
+
+#ifdef _WIN32
+/*
+ *  Win32 message code aliases
+ */
+
+#define lucEventExit (WM_QUIT)
+
+#define lucEventKeyDown (WM_KEYDOWN)
+#define lucEventKeyUp (WM_KEYUP)
+
+#endif
+
+#ifdef _WIN32
+/*
+ *  Win32 key code aliases
+ */
+
+#define lucKeyEscape VK_ESCAPE
+
+#endif // _WIN32 key code aliases
 
 /*
  *  Abstract Application declarations
@@ -33,8 +55,8 @@
 
 // Friendly error codes
 enum LucFriendlyErrorCodes {
-  lucInternalError = 1,
-  lucErrorCreatingApp,
+  lucErrorUnsupportedOption = 1,
+  lucErrorCreatingApp
 };
 
 // App creation flags
@@ -45,17 +67,38 @@ enum LucCreateAppFlags {
 // App state structure
 typedef struct LucAppImpl LucApp;
 
+// Event structure
+typedef struct LucEvent {
+  size_t structSize; // = sizeof(LucEvent)
+
+  unsigned what;
+  unsigned key;
+
+#ifdef _WIN32
+  MSG sysmsg; // Required for lucPassEvent
+#endif
+} LucEvent;
+
 // Abstract app declarations
+
+unsigned lucAppError( LucApp* app );
+
+unsigned lucAppErrorIndex( LucApp* app );
+
 LucApp* lucCreateApp( const char* title, unsigned width, unsigned height,
   unsigned flags, LucEventRouter eventRouter );
 
 unsigned lucReleaseApp( LucApp** appPtr );
 
-unsigned lucExitApp( unsigned returnCode );
+unsigned lucAppIsRunning( LucApp* app );
 
-unsigned lucRouteEvents( LucApp* app );
+unsigned lucExitApp( LucApp* app, unsigned returnCode );
 
-unsigned lucWaitForNextEvent( LucApp* app );
+LucEvent lucGetEvent( LucApp* app );
+
+LucEvent lucWaitEvent( LucApp* app );
+
+unsigned lucPassEvent( LucApp* app, LucEvent* event );
 
 /*
  *  Abstract Surface declarations
@@ -78,6 +121,20 @@ typedef struct LucGraphicsSystemImpl LucGraphicsSystem;
 // Display state structure
 typedef struct LucDisplayImpl LucDisplay;
 
+// Begin: Draft header documentation format
+//
+//  Function: lucDisplayCount
+//
+//  Returns the number of connected screens based on the application object.
+//
+//  Returns:
+//  - MAX_UINT on error
+//  - Screen count
+//
+//  Parameters:
+//  - app = App state with implementation specific contexts/data
+//
+// End: Draft header documentation format
 unsigned lucDisplayCount( LucApp* app );
 
 LucDisplay* lucCreateDisplay( LucApp* app,

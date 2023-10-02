@@ -82,12 +82,21 @@ CGA
 
 typedef struct LucAppImpl LucApp;
 
+typedef struct LucEventImpl {
+  size_t structSize; // = sizeof(LucEvent)
+
+  unsigned what;
+  unsigned key;
+} LucEvent;
+
 LucApp* lucCreateApp( const char* title, unsigned width, unsigned height,
     unsigned flags, LucEventRouter eventRouter );
 
 unsigned lucReleaseApp( LucApp** appPointer );
 
-unsigned lucExitApp( unsigned returnCode );
+unsigned lucAppIsRunning( LucApp* app );
+
+unsigned lucExitApp( LucApp* app, unsigned returnCode );
 
 unsigned lucRouteEvents( LucApp* app );
 
@@ -106,8 +115,17 @@ typedef struct LucApp {
   HINSTANCE instance;
 } LucApp;
 
+typedef struct LucEventImpl {
+  size_t structSize; // = sizeof(LucEvent)
+
+  unsigned what;
+  unsigned key;
+
+  MSG sysmsg;
+} LucEventImpl;
+
 LucApp* lucCreateApp( const char* title, unsigned width, unsigned height,
-    unsigned flags, LucEventRouter eventRouter );
+        unsigned flags, LucEventRouter eventRouter );
 
 unsigned lucReleaseApp( LucApp** appPointer );
 

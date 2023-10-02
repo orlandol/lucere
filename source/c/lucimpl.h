@@ -15,7 +15,7 @@
 #include "windows.h"
 
 typedef struct LucAppImpl {
-  size_t structSize;
+  size_t structSize; // = sizeof(LucApp)
 
   unsigned friendlyError;
   unsigned errorIndex;
