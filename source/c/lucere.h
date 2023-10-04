@@ -128,7 +128,7 @@ typedef struct LucDisplayImpl LucDisplay;
 //  Returns the number of connected screens based on the application object.
 //
 //  Returns:
-//  - MAX_UINT on error
+//  - UINT_MAX on error
 //  - Screen count
 //
 //  Parameters:

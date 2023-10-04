@@ -1,6 +1,6 @@
 ========================================
 = Lucere Design Spec by Orlando Llanes =
-=                      Updated 9/25/23 =
+=                   Updated 2023-10-04 =
 ========================================
 
 Purpose: Provide a stable foundation for games and multimedia software.
@@ -82,12 +82,18 @@ CGA
 
 typedef struct LucAppImpl LucApp;
 
-typedef struct LucEventImpl {
+typedef struct LucEvent {
   size_t structSize; // = sizeof(LucEvent)
 
   unsigned what;
   unsigned key;
+
+#ifdef _WIN32
+  MSG sysmsg; // Required for lucPassEvent
+#endif
 } LucEvent;
+
+#include "lucere.h"
 
 LucApp* lucCreateApp( const char* title, unsigned width, unsigned height,
     unsigned flags, LucEventRouter eventRouter );
@@ -98,9 +104,11 @@ unsigned lucAppIsRunning( LucApp* app );
 
 unsigned lucExitApp( LucApp* app, unsigned returnCode );
 
-unsigned lucRouteEvents( LucApp* app );
+LucEvent lucGetEvent( LucApp* app );
 
-unsigned lucWaitForNextEvent( LucApp* app );
+LucEvent lucWaitEvent( LucApp* app );
+
+unsigned lucPassEvent( LucApp* app, LucEvent* event );
 
 ===============================
 = Win32 Application Interface =
@@ -115,25 +123,7 @@ typedef struct LucApp {
   HINSTANCE instance;
 } LucApp;
 
-typedef struct LucEventImpl {
-  size_t structSize; // = sizeof(LucEvent)
-
-  unsigned what;
-  unsigned key;
-
-  MSG sysmsg;
-} LucEventImpl;
-
-LucApp* lucCreateApp( const char* title, unsigned width, unsigned height,
-        unsigned flags, LucEventRouter eventRouter );
-
-unsigned lucReleaseApp( LucApp** appPointer );
-
-unsigned lucExitApp( unsigned returnCode );
-
-unsigned lucRouteEvents( LucApp* app );
-
-unsigned lucWaitForNextEvent( LucApp* app );
+... // Directly implement Application interface
 
 ======================
 = Graphics Hierarchy =
@@ -989,7 +979,8 @@ typedef struct Win32GdiImage {
 
 unsigned gdiImageSurfaceType( LucImage* image );
 
-LucImage* gdiCreateImage( Canvas* canvas, unsigned width, unsigned height );
+LucImage* gdiCreateImage( Canvas* canvas,
+  unsigned width, unsigned height );
 
 unsigned gdiReleaseImage( LucImage** imagePointer );
 
@@ -1000,5 +991,43 @@ unsigned gdiReleaseImageSurface( LucSurface** surfacePointer );
 ===================
 = World Interface =
 ===================
+
+#include "lucere.h"
+
+LucWorld* LucCreateWorld();
+
+unsigned LucReleaseWorld( LucWorld** worldPointer );
+
+unsigned LucAddEntity( LucWorld* world, int worldX, int worldY,
+  LucEntity* entity );
+
+unsigned LucRemoveEntity( LucWorld* world, LucEntity* entity );
+
+unsigned LucTrackEntity( LucWorld* world, LucEntity* entity );
+
+LucWorld* LucLoadWorld( LucIO* worldFile );
+
+unsigned LucSaveWorld( LucIO* worldFile );
+
+unsigned LucWorldSetViewport( LucWorld* world, int viewX, int viewY,
+  int viewWidth, int viewHeight );
+
+unsigned LucDrawWorld( Canvas* canvas, LucWorld* world );
+
+========================
+= World Implementation =
+========================
+
+#include "lucimpl.h"
+
+typedef struct LucWorldImpl {
+  size_t structSize;
+
+  LucEntity* entity;
+  unsigned entityCount;
+
+  LucLayer* layer;
+  unsigned layerCount;
+} LucWorld;
 
 ========================================

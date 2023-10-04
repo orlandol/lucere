@@ -60,10 +60,6 @@ LucApp* lucCreateApp( const char* title, unsigned width, unsigned height,
   createAppError.errorIndex = 6;
   if( !(title && (*title)) ) { goto ReturnError; }
 
-  width = width ? width : CW_USEDEFAULT;
-
-  height = height ? height : CW_USEDEFAULT;
-
   ///TODO: Enforce single instance if appMultiInstance isn't specified
 
   // Instantiate app state
