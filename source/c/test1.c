@@ -13,20 +13,16 @@ int main( int argc, char** argv ) {
     exit(1);
   }
 
-  while( lucAppIsRunning(app) ) {
+  while( lucAppRunning(app) ) {
     event = lucGetEvent(app);
 
-    if( event.what == lucEventExit ) {
+    if( event.what == eventCleanup ) {
       lucExitApp( app, 0 );
       break;
     }
 
     switch( event.what ) {
-    case lucEventExit:
-      lucExitApp( app, 0 );
-      break;
-
-    case lucEventKeyDown:
+    case eventKeyDown:
       if( event.key == lucKeyEscape ) {
         lucExitApp( app, 0 );
         break;

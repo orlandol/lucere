@@ -24,6 +24,8 @@ typedef struct LucAppImpl {
   HINSTANCE instance;
 } LucAppImpl;
 
+#endif // _WIN32 app declarations
+
 /*
  *  Abstract Surface declarations
  */
@@ -117,8 +119,42 @@ typedef struct LucGraphicsSystemImpl {
 } LucGraphicsSystemImpl;
 
 /*
+ *  Abstract display declarations
+ */
+
+typedef struct LucDisplayImpl {
+  size_t structSize; // = sizeof(LucDisplayImpl)
+
+  LucReleaseDisplayFunc releaseDisplay;
+
+  LucCenterCanvasFunc centerCanvas;
+  LucFitCanvasHFunc fitCanvasH;
+  LucFitCanvasVFunc fitCanvasV;
+  LucStretchCanvasFunc stretchCanvas;
+
+  LucCreateCanvasFunc createCanvas;
+} LucDisplayImpl;
+
+#ifdef _WIN32
+/*
  *  Win32 GDI display declarations
  */
+
+typedef struct Win32GdiDisplay {
+  size_t structSize; // = sizeof(Win32GdiDisplay)
+
+  LucReleaseDisplayFunc releaseDisplay;
+
+  LucCenterCanvasFunc centerCanvas;
+  LucFitCanvasHFunc fitCanvasH;
+  LucFitCanvasVFunc fitCanvasV;
+  LucStretchCanvasFunc stretchCanvas;
+
+  LucCreateCanvasFunc createCanvas;
+
+  HBITMAP drawTarget;
+  HBITMAP redrawCache;
+} Win32GdiDisplay;
 
 unsigned gdiDisplayCount( LucApp* app );
 
@@ -136,7 +172,6 @@ typedef struct LucImageImpl {
 
   LucReleaseImageFunc releaseImage;
 } LucImageImpl;
-
 #endif // _WIN32
 
 #endif // LUCIMPL_H

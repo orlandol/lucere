@@ -100,7 +100,7 @@ LucApp* lucCreateApp( const char* title, unsigned width, unsigned height,
 
 unsigned lucReleaseApp( LucApp** appPointer );
 
-unsigned lucAppIsRunning( LucApp* app );
+unsigned lucAppRunning( LucApp* app );
 
 unsigned lucExitApp( LucApp* app, unsigned returnCode );
 

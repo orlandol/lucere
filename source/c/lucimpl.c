@@ -55,7 +55,7 @@ LucApp* lucCreateApp( const char* title, unsigned width, unsigned height,
   GetStartupInfo( &startupInfo );
 
   // Validate or initialize parameters
-  createAppError.friendlyError = lucErrorCreatingApp;
+  createAppError.friendlyError = errorCreatingApp;
 
   createAppError.errorIndex = 6;
   if( !(title && (*title)) ) { goto ReturnError; }
@@ -124,7 +124,7 @@ unsigned lucReleaseApp( LucApp** appPtr ) {
   return 0;
 }
 
-unsigned lucAppIsRunning( LucApp* app ) {
+unsigned lucAppRunning( LucApp* app ) {
   return ((app && app->window) ? 1 : 0 );
 }
 
@@ -194,6 +194,7 @@ unsigned lucPassEvent( LucApp* app, LucEvent* event ) {
 
   return 0;
 }
+#endif // _WIN32
 
 /*
  *  Abstract Display implementation
@@ -206,9 +207,22 @@ LucDisplay* lucCreateDisplay( LucApp* app,
 }
 
 unsigned lucReleaseDisplay( LucDisplay** displayPtr ) {
-  return 2;
+  unsigned result = 1;
+
+  if( displayPtr && (*displayPtr) ) {
+    result++;
+    if( ((LucDisplayImpl*)(*displayPtr))->releaseDisplay ) {
+      result = ((LucDisplayImpl*)(*displayPtr))->releaseDisplay( displayPtr );
+    }
+
+    free( (*displayPtr) );
+    (*displayPtr) = NULL;
+  }
+
+  return result;
 }
 
+#ifdef _WIN32
 /*
  *  Win32 Display implementation
  */

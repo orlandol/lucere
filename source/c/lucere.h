@@ -3,7 +3,7 @@
 
 #ifdef _WIN32
 #include "windows.h"
-#endif
+#endif // _WIN32 includes
 
 #ifdef _WIN32
 /*
@@ -33,12 +33,12 @@ typedef WNDPROC LucEventRouter;
  *  Win32 message code aliases
  */
 
-#define lucEventExit (WM_QUIT)
+#define eventCleanup (WM_QUIT)
 
-#define lucEventKeyDown (WM_KEYDOWN)
-#define lucEventKeyUp (WM_KEYUP)
+#define eventKeyDown (WM_KEYDOWN)
+#define eventKeyUp (WM_KEYUP)
 
-#endif
+#endif // _WIN32 message code aliases
 
 #ifdef _WIN32
 /*
@@ -55,8 +55,8 @@ typedef WNDPROC LucEventRouter;
 
 // Friendly error codes
 enum LucFriendlyErrorCodes {
-  lucErrorUnsupportedOption = 1,
-  lucErrorCreatingApp
+  errorUnsupportedOption = 1,
+  errorCreatingApp
 };
 
 // App creation flags
@@ -90,7 +90,7 @@ LucApp* lucCreateApp( const char* title, unsigned width, unsigned height,
 
 unsigned lucReleaseApp( LucApp** appPtr );
 
-unsigned lucAppIsRunning( LucApp* app );
+unsigned lucAppRunning( LucApp* app );
 
 unsigned lucExitApp( LucApp* app, unsigned returnCode );
 
